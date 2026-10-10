@@ -7,7 +7,8 @@ Estúdio estático de cores para o chaveiro Enforma, com modelos 3D reais e vari
 ## Recursos
 
 - Seis grupos fechados de filamentos, separados em PLA e PETG.
-- Geração de seis sugestões com exatamente 3, 4 ou 5 cores, sem interpolar novos filamentos.
+- Rolagem contínua em lotes de até 50 combinações únicas, com exatamente 3, 4 ou 5 cores, sem interpolar novos filamentos.
+- Miniaturas 3D carregadas perto da área visível; contador e fim explícito quando as possibilidades da seleção se esgotam.
 - Branco/preto como quarta cor dos grupos de três; ambos podem entrar no estudo com cinco cores.
 - O grupo PETG azul/amarelo permite três cores (azul, amarelo, branco) ou quatro (mais preto).
 - Órbita, frente, verso, perspectiva, zoom e duas versões da peça.

@@ -7,3 +7,9 @@ O build estático passou. Chromium isolado com WebGL carregou as duas malhas, ge
 Os modelos de exibição usam as malhas existentes. Corpo, tampa e logotipo mantêm seus vértices; somente a arte recebe redução de detalhe, limitada aos extremos de cada parte original. Não foram alterados arquivos de produção, dimensões da base, projetos no Keychain Maker ou configurações de impressora. As receitas de cinco cores não foram fatiadas nem validadas com troca de filamento por pausa.
 
 A publicação em https://forjastudio3d.github.io/colora-enforma/ foi concluída na branch `deploy`, commit `fc80aa822a9498b58e6d1293457f1f17d2de4731`. HTML, JavaScript, manifesto e ambos os GLBs retornaram HTTP 200 com SHA-256 idêntico ao build local. O mesmo roteiro de navegador passou no endereço público, incluindo persistência, variantes, PNG, backup e viewport mobile, sem erros de JavaScript.
+
+# Rolagem contínua · 2026-10-10
+
+Os nove testes Node e o build estático passaram. A paginação entrega até 50 combinações únicas por lote, respeita as travas e encerra ao esgotar as possibilidades, sem preencher com repetições. O grupo PETG rosa com cinco cores percorreu lotes de 50, 50 e 20; o grupo de cores da boneca oferece 2.520 distribuições de cinco cores.
+
+Chromium isolado com WebGL confirmou o carregamento automático ao rolar, a seleção e o salvamento de um item do segundo lote, o encerramento da lista, as travas e a reinicialização ao trocar grupo ou variante. Favoritas restauraram grupo, material, variante e cores, inclusive após recarregar. As miniaturas são renderizadas perto da área visível, com cache limitado a 140 imagens. A inspeção visual passou em 1440 × 1000 px e 390 × 844 px, sem overflow horizontal ou erros de JavaScript. As malhas 3D não foram alteradas nesta atualização.

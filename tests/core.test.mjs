@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {GROUPS} from '../src/catalog.mjs';
-import {generateBatch,roleSlots,availablePool,recipeKey,validateBackup,validateRecipe,saveFavorites,loadFavorites} from '../src/core.mjs';
+import {generateBatch,createRecipePager,PAGE_SIZE,roleSlots,availablePool,recipeKey,validateBackup,validateRecipe,saveFavorites,loadFavorites} from '../src/core.mjs';
 test('all generated recipes stay in the selected group and have exactly the requested physical colors',()=>{
  for(const group of GROUPS)for(const count of [3,4,5]){
   if(group.colors.length<count){assert.throws(()=>generateBatch({groupId:group.id,count}));continue;}
@@ -48,4 +48,20 @@ test('backup cannot bypass team membership rules or invent a filament color or f
  assert.throws(()=>validateRecipe({...tropical,colors:tropical.colors.map(c=>c.id==='gold'?tropicalBlack:c)}),/permitidas/);
  assert.throws(()=>validateRecipe({...p,colors:p.colors.map(c=>({...c,hex:'#123456'}))}),/cadastrado/);
  assert.throws(()=>validateRecipe({...p,colors:p.colors.map((c,i)=>i===0?{...c,finish:'silk'}:c)}),/cadastrado/);
+});
+test('scroll pages contain 50 unique combinations, never repeat and stop at exhaustion',()=>{
+ const pager=createRecipePager({groupId:'petg-rosas',count:5,seed:17});
+ assert.equal(PAGE_SIZE,50);assert.equal(pager.total,120);
+ const pages=[pager.next(),pager.next(),pager.next()];assert.deepEqual(pages.map(p=>p.length),[50,50,20]);
+ assert.equal(new Set(pages.flat().map(recipeKey)).size,120);assert.equal(pager.hasMore,false);assert.deepEqual(pager.next(),[]);
+ assert.ok(pages.flat().every(p=>p.material==='PETG'&&p.groupId==='petg-rosas'&&new Set(p.colors.map(c=>c.id)).size===5));
+});
+test('small teams and locked colors finish without duplicate padding or infinite loading',()=>{
+ const small=createRecipePager({groupId:'pla-tropical',count:4});assert.equal(small.next().length,24);assert.equal(small.hasMore,false);
+ const three=createRecipePager({groupId:'petg-azul-amarelo',count:3});assert.equal(three.next().length,6);assert.equal(three.hasMore,false);
+ const current=generateBatch({groupId:'pla-boneca',count:5,seed:4})[0];
+ const locked=createRecipePager({groupId:'pla-boneca',count:5,current,locks:[true,false,false,false,false],seed:2});
+ const recipes=[];while(locked.hasMore)recipes.push(...locked.next());
+ assert.equal(recipes.length,360);assert.equal(new Set(recipes.map(recipeKey)).size,360);assert.ok(recipes.every(p=>p.colors[0].id===current.colors[0].id));
+ const all=createRecipePager({groupId:current.groupId,count:5,current,locks:[true,true,true,true,true]});assert.equal(all.next().length,1);assert.equal(all.hasMore,false);
 });

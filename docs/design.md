@@ -6,7 +6,7 @@ Um visualizador Three.js usa malhas reais da base v25b-released e da arte V2, em
 
 Grupos fechados: PLA azuis/violeta, PLA azuis/roxo silk, PETG rosas, PLA vermelho/verde/amarelo, PETG azul/amarelo e PLA boneca. Cores não migram entre grupos. Branco/preto são opções neutras do material do grupo. PETG azul/amarelo tem somente quatro cores disponíveis e não permite inventar uma quinta.
 
-Gerador com três, quatro ou cinco cores, seis sugestões por rodada, travas, edição das cores disponíveis, troca entre variantes, órbita e vistas, favoritos locais com snapshots, PNG, receita textual e backup/restauração JSON validado. O usuário escolhe quais receitas salvar; a geração não altera o Keychain Maker.
+Gerador com três, quatro ou cinco cores, rolagem contínua em lotes de até 50 combinações únicas, travas, edição das cores disponíveis, troca entre variantes, órbita e vistas, favoritos locais com snapshots, PNG, receita textual e backup/restauração JSON validado. O usuário escolhe quais receitas salvar; a geração não altera o Keychain Maker. As miniaturas são renderizadas perto da área visível, com cache limitado; a lista indica quando todas as possibilidades do grupo e das travas se esgotaram.
 
 Visual: estúdio claro azul gelo, painel de peça amplo e controles compactos; tipografia Avenir Next/Trebuchet MS; acentos azul profundo e turquesa. As cores ficam na peça e nas amostras, sem fundos decorativos concorrentes. Mobile mantém a peça antes dos controles e sugestões.
 

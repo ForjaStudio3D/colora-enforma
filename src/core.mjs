@@ -24,23 +24,31 @@ export function makeRecipe(groupId,variant,colors,name='Sua combinação'){
  if(!colors.every(c=>{const known=group.colors.find(gc=>gc.id===c.id);return typeof c.hex==='string'&&c.hex.toLowerCase()===known.hex.toLowerCase()&&c.finish===known.finish;}))throw new Error('A cor ou o acabamento não corresponde ao filamento cadastrado.');
  return {version:1,groupId,material:group.material,variant,count,name,colors:colors.map(c=>({...c})),createdAt:new Date().toISOString()};
 }
-export function generateBatch({groupId,variant='com-fundo',count=4,neutral='white',seed=Date.now(),size=6,current=null,locks=[]}={}){
- const pool=availablePool(groupId,count,neutral),rng=rngSeed(seed),out=[],seen=new Set();
- const fixed=new Set();
+export const PAGE_SIZE=50;
+export function createRecipePager({groupId,variant='com-fundo',count=4,neutral='white',seed=Date.now(),size=PAGE_SIZE,current=null,locks=[]}={}){
+ if(!Number.isSafeInteger(size)||size<1)throw new Error('Quantidade por lote inválida.');
+ const pool=availablePool(groupId,count,neutral),fixed=Array(count).fill(null),permutations=[];
  for(let i=0;i<count;i++)if(locks[i]&&current?.groupId===groupId&&current.count===count){
-  if(!pool.some(c=>c.id===current.colors[i].id))throw new Error('Destrave a cor que não está nesta seleção.');
-  fixed.add(current.colors[i].id);
+  fixed[i]=pool.find(c=>c.id===current.colors[i].id);
+  if(!fixed[i])throw new Error('Destrave a cor que não está nesta seleção.');
  }
- for(let trial=0;trial<2400&&out.length<size;trial++){
-  const available=shuffle(pool.filter(c=>!fixed.has(c.id)),rng),colors=Array(count);
-  for(let i=0;i<count;i++)colors[i]=locks[i]&&current?.groupId===groupId&&current.count===count?current.colors[i]:available.pop();
-  const p=makeRecipe(groupId,variant,colors,`Combinação ${out.length+1}`),k=recipeKey(p);
-  if(!seen.has(k)){seen.add(k);out.push(p);}
+ const reserved=new Set(fixed.filter(Boolean).map(c=>c.id)),used=new Set(),colors=[];
+ if(reserved.size!==fixed.filter(Boolean).length)throw new Error('Cada posição deve usar um filamento diferente.');
+ function visit(i){
+  if(i===count){permutations.push([...colors]);return;}
+  if(fixed[i]){colors[i]=fixed[i];visit(i+1);return;}
+  for(const c of pool)if(!reserved.has(c.id)&&!used.has(c.id)){colors[i]=c;used.add(c.id);visit(i+1);used.delete(c.id);}
  }
- // Rank contrast without manufacturing any new filament colors.
- out.sort((a,b)=>contrast(b.colors[0].hex,b.colors.at(-1).hex)-contrast(a.colors[0].hex,a.colors.at(-1).hex));
- return out.map((p,i)=>({...p,name:`${groupById(groupId).name} ${i+1}`}));
+ visit(0);
+ const ordered=shuffle(permutations,rngSeed(seed));
+ ordered.sort((a,b)=>contrast(b[0].hex,b.at(-1).hex)-contrast(a[0].hex,a.at(-1).hex));
+ let offset=0;
+ return {total:ordered.length,get hasMore(){return offset<ordered.length;},next(){
+  const start=offset;offset=Math.min(offset+size,ordered.length);
+  return ordered.slice(start,offset).map((colors,i)=>makeRecipe(groupId,variant,colors,`${groupById(groupId).name} ${start+i+1}`));
+ }};
 }
+export function generateBatch(options={}){return createRecipePager({...options,size:options.size??6}).next();}
 export function validateRecipe(p){
  if(!p||p.version!==1||!Array.isArray(p.colors)||p.colors.length!==p.count||typeof p.name!=='string'||p.name.length>90)throw new Error('Combinação inválida.');
  const group=groupById(p.groupId);
