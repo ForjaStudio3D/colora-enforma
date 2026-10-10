@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
-import {roleSlots} from './core.mjs';
+import {renderRecipe} from './studio.mjs';
 
 const BG=0xe9eff7;
 function lights(scene){
@@ -43,14 +43,14 @@ export class KeychainViewer{
  }
  async load(){
   const loader=new GLTFLoader();
-  await Promise.all(['com-fundo','sem-fundo'].map(async id=>{const gltf=await loader.loadAsync(new URL(`./models/${id}.glb`,document.baseURI).href);this.models[id]=prepare(gltf.scene);this.models[id].visible=false;this.scene.add(this.models[id]);}));
+  await Promise.all(['sem-fundo'].map(async id=>{const gltf=await loader.loadAsync(new URL(`./models/${id}.glb`,document.baseURI).href);this.models[id]=prepare(gltf.scene);this.models[id].visible=false;this.scene.add(this.models[id]);}));
   return this;
  }
  resize(){const {width,height}=this.canvas.parentElement.getBoundingClientRect();if(!width||!height)return;this.renderer.setSize(width,height,false);this.camera.aspect=width/height;this.camera.updateProjectionMatrix();this.render();}
  apply(recipe){
   this.current=recipe;this.active=this.models[recipe.variant];if(!this.active)return;
   for(const [id,model]of Object.entries(this.models))model.visible=id===recipe.variant;
-  const previous=this.materials;this.materials=recipe.colors.map(colorMaterial);const map=roleSlots(recipe.count);
+  const previous=this.materials,{colors,map}=renderRecipe(recipe);this.materials=colors.map(colorMaterial);
   this.active.traverse(o=>{if(o.isMesh)o.material=this.materials[map[o.userData.role]];});
   previous.forEach(m=>m.dispose());this.render();
  }
@@ -59,7 +59,7 @@ export class KeychainViewer{
  zoom(factor){this.camera.position.sub(this.controls.target).multiplyScalar(factor).add(this.controls.target);this.controls.update();this.render();}
  snapshot(recipe,width=360,height=390){
   // Share immutable geometries; each snapshot owns only its temporary materials.
-  const clone=this.models[recipe.variant].clone(true),materials=recipe.colors.map(colorMaterial),map=roleSlots(recipe.count);clone.visible=true;
+  const {colors,map}=renderRecipe(recipe),clone=this.models[recipe.variant].clone(true),materials=colors.map(colorMaterial);clone.visible=true;
   clone.traverse(o=>{if(o.isMesh)o.material=materials[map[o.userData.role]];});this.thumbnailScene.add(clone);
   this.thumbnailRenderer.setSize(width,height,false);this.thumbnailCamera.aspect=width/height;this.thumbnailCamera.updateProjectionMatrix();this.thumbnailRenderer.render(this.thumbnailScene,this.thumbnailCamera);
   const png=this.thumbnailRenderer.domElement.toDataURL('image/png');this.thumbnailScene.remove(clone);materials.forEach(m=>m.dispose());return png;
