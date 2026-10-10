@@ -11,6 +11,50 @@ export const GROUPS=[
 ];
 export const VARIANTS=[{id:'com-fundo',name:'Com fundo',detail:'Oceano, ondas e pedras'},{id:'sem-fundo',name:'Sem fundo',detail:'Animais e plantas'}];
 export const FINISH_LABELS={solid:'Sólido',silk:'Silk',translucent:'Translúcido'};
-export const REGION_NAMES=['Corpo e tampa','Sombras da arte','Oceano e tons médios','Animais e tons claros','Olhos e detalhes'];
-export const SLOT_NAMES={3:['Corpo e sombras','Oceano e animais','Olhos e detalhes'],4:['Corpo e sombras','Tons médios','Tons claros','Olhos e detalhes'],5:REGION_NAMES};
+export const REGION_NAMES=['Corpo e tampa','Tons escuros da arte','Tons médios da arte','Tons claros e Kids','Brilhos e Enforma'];
+export const SLOT_NAMES={3:['Corpo e tons escuros','Tons médios e claros','Brilhos e Enforma'],4:['Corpo e tons escuros','Tons médios da arte','Tons claros e Kids','Brilhos e Enforma'],5:REGION_NAMES};
+
+// Authored selections follow the original model's dark / medium / light / white
+// regions. These are physical filament IDs, not newly generated paint colors.
+const pick=(name,ids,reason)=>({name,ids:ids.split(' '),reason});
+export const PALETTE_SELECTIONS={
+ 'pla-azuis-violeta':[
+  pick('Oceano suave','violet blue sky white','Escala azul com base violeta e brilhos brancos.'),
+  pick('Oceano profundo','violet black blue sky white','Preto nos contornos, azuis na água e branco nos brilhos.'),
+  pick('Azuis na noite','black violet blue sky','Base preta com a arte em três tons de azul.'),
+  pick('Três azuis','violet blue sky','Escala tonal azul, do violeta escuro ao azul céu.'),
+ ],
+ 'pla-roxo-silk':[
+  pick('Azul com silk','royal purple azure white','Base azul profunda, roxo silk na arte e brilhos brancos.'),
+  pick('Roxo com luz','purple royal azure white','Corpo roxo silk com azuis na arte e branco no logotipo.'),
+  pick('Silk no oceano','royal black purple azure white','Contornos pretos separam roxo, azul e brilhos brancos.'),
+  pick('Roxo profundo','purple black royal azure white','Corpo silk com contornos pretos e a arte em azul.'),
+  pick('Silk na noite','black royal purple azure','Base preta, azul profundo e roxo com detalhes azul claro.'),
+  pick('Três tons silk','royal purple azure','Azul profundo, roxo silk e azul médio em uma escala suave.'),
+ ],
+ 'petg-rosas':[
+  pick('Rosa suave','pink hotpink rose white','Rosas na arte, translúcido nos tons claros e branco nos brilhos.'),
+  pick('Rosa com contorno','pink black hotpink rose white','Contornos pretos destacam a arte rosa e os brilhos brancos.'),
+  pick('Rosas na noite','black pink hotpink rose','Fundo preto com três rosas e detalhes translúcidos.'),
+  pick('Três rosas','pink hotpink rose','Três rosas próximos para uma composição tonal suave.'),
+ ],
+ 'pla-tropical':[
+  pick('Tropical claro','red mint gold white','Base vermelha com menta, amarelo e brilhos brancos.'),
+  pick('Tropical com contorno','red black mint gold white','Preto nos contornos equilibra menta e amarelo na arte.'),
+  pick('Tropical na noite','black red mint gold','Base preta com vermelho, menta e detalhes em amarelo.'),
+  pick('Três tropicais','red mint gold','Vermelho na base, menta na arte e amarelo nos brilhos.'),
+ ],
+ 'petg-azul-amarelo':[
+  pick('Azul e sol','deepblue yellow white','Base azul, animais amarelos e brilhos brancos.'),
+  pick('Sol na noite','black deepblue yellow white','Base preta, água azul e amarelo com brilhos brancos.'),
+ ],
+ 'pla-boneca':[
+  pick('Lavanda e areia','indigo lavender skin white','Azul violeta na base, lavanda e um único acento quente.'),
+  pick('Lavanda e sol','indigo lavender yellow white','Lavanda e amarelo com base azul e brilhos brancos.'),
+  pick('Areia com contorno','indigo black lavender skin white','Contornos pretos separam lavanda, areia e brilhos brancos.'),
+  pick('Sol com contorno','indigo black lavender yellow white','Base azul, contornos pretos e um acento amarelo.'),
+  pick('Lavanda suave','indigo lavender white','Três cores com base escura, lavanda e brilhos brancos.'),
+  pick('Areia suave','indigo skin white','Azul violeta e areia com brilhos brancos.'),
+ ],
+};
 export function groupById(id){const g=GROUPS.find(g=>g.id===id);if(!g)throw new Error('Grupo de filamentos não encontrado.');return g;}

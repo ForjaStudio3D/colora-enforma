@@ -13,3 +13,13 @@ A publicação em https://forjastudio3d.github.io/colora-enforma/ foi concluída
 Os nove testes Node e o build estático passaram. A paginação entrega até 50 combinações únicas por lote, respeita as travas e encerra ao esgotar as possibilidades, sem preencher com repetições. O grupo PETG rosa com cinco cores percorreu lotes de 50, 50 e 20; o grupo de cores da boneca oferece 2.520 distribuições de cinco cores.
 
 Chromium isolado com WebGL confirmou o carregamento automático ao rolar, a seleção e o salvamento de um item do segundo lote, o encerramento da lista, as travas e a reinicialização ao trocar grupo ou variante. Favoritas restauraram grupo, material, variante e cores, inclusive após recarregar. As miniaturas são renderizadas perto da área visível, com cache limitado a 140 imagens. A inspeção visual passou em 1440 × 1000 px e 390 × 844 px, sem overflow horizontal ou erros de JavaScript. As malhas 3D não foram alteradas nesta atualização.
+
+# Curadoria de cores · 2026-10-10
+
+Taste/Impeccable orientaram 26 seleções entre os seis grupos e as contagens de 3/4/5 cores. A leitura da fonte e dos nomes das malhas confirmou r1 como tons escuros da arte e r4 como brancos/brilhos/Enforma. Os rótulos foram corrigidos; mapas de regiões, vértices, materiais cadastrados e formato das receitas permanecem iguais.
+
+Os 12 testes Node passaram, incluindo validade de todas as seleções, ordenação determinística, não mutação, filtros, travas sem recomendação possível, universos completos e favoritos antigos. A revisão independente não encontrou regressões acionáveis.
+
+Chromium isolado com WebGL confirmou a recomendação inicial e as prévias dos seis grupos. “Todas” percorreu 50/100/120 combinações PETG rosa sem repetição. Foram verificados seleção/salvamento no segundo lote, favoritas filtradas com abertura/remoção por índice correto, exportação de todas as favoritas com filtro ativo, restauração de nome/data/cores antigos, variantes, travas sem resultados e recuperação via Todas, três cores PETG azul/amarelo, navegação por teclado e persistência após recarregar. Nenhum erro de JavaScript.
+
+Inspeção visual desktop e mobile confirmou a galeria recomendada e a listagem de favoritas. O enquadramento das miniaturas foi corrigido para conter a peça inteira, inclusive nos cartões maiores. O viewport de 390 × 844 px não apresentou overflow horizontal. O texto secundário foi ajustado para contraste mínimo de 5:1 nas superfícies usadas. O detector Impeccable apontou apenas a borda de 3 px preexistente no aviso de cinco cores; ela foi reduzida para 1 px. Não houve alteração do visualizador 3D ou das malhas de produção.

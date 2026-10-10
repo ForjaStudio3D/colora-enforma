@@ -1,12 +1,12 @@
 import {GROUPS,VARIANTS,SLOT_NAMES,FINISH_LABELS,groupById} from './catalog.mjs';
-import {createRecipePager,PAGE_SIZE,availablePool,makeRecipe,recipeKey,recipeText,loadFavorites,saveFavorites,validateBackup} from './core.mjs';
+import {createRecipePager,PAGE_SIZE,availablePool,makeRecipe,recipeKey,recipeText,loadFavorites,saveFavorites,validateBackup,recommendationFor,listFavorites} from './core.mjs';
 import {KeychainViewer} from './viewer.mjs';
 
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const lockIcon=locked=>`<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="${locked?'M8 10V6a4 4 0 0 1 8 0v4':'M8 10V6a4 4 0 0 1 7.5-2'}"/><path d="M12 14v3"/></svg>`;
 const swatch=c=>`<span class="color-disc ${c.finish}" style="--swatch:${c.hex}"></span>`;
-const state={groupId:GROUPS[0].id,variant:'com-fundo',count:4,neutral:'white',locks:Array(5).fill(false),current:null,batch:[],pager:null,loadingPage:false,favorites:[],view:'studio',ready:false,generation:0,thumbnails:new Map()};
+const state={groupId:GROUPS[0].id,variant:'com-fundo',count:4,neutral:'white',locks:Array(5).fill(false),current:null,batch:[],galleryRecipes:[],pager:null,loadingPage:false,favorites:[],view:'studio',selection:'recommended',favoriteSelection:'all',ready:false,generation:0,thumbnails:new Map()};
 let storage;
 try{storage=localStorage;state.favorites=loadFavorites(storage);}catch{storage=null;}
 let viewer=null,toastTimer;
@@ -16,7 +16,7 @@ const thumbnailObserver=new IntersectionObserver(entries=>{
   const target=entry.target;
   if(!entry.isIntersecting){thumbnailJobs.delete(target);const holder=target.querySelector('.palette-image');if(holder?.querySelector('img'))holder.innerHTML='<span class="palette-placeholder">Prévia 3D</span>';continue;}
   if(!state.ready)continue;
-  const recipes=state.view==='favorites'?state.favorites:state.batch,p=recipes[Number(target.dataset.open)];
+  const p=state.galleryRecipes[Number(target.dataset.open)];
   if(p)thumbnailJobs.set(target,{recipe:p,generation:state.generation});
  }
  renderThumbnails();
@@ -39,6 +39,7 @@ function renderGroup(){
 function renderSlots(){
  if(!state.current)return;const pool=availablePool(state.groupId,state.count,state.neutral);
  $('#slots').innerHTML=state.current.colors.map((c,i)=>`<div class="slot">${swatch(c)}<label><span>${SLOT_NAMES[state.count][i]}</span><select data-slot="${i}" aria-label="Filamento de ${SLOT_NAMES[state.count][i]}">${pool.map(color=>`<option value="${color.id}" ${color.id===c.id?'selected':''}>${escape(color.name)}</option>`).join('')}</select></label><button class="lock-button" data-lock="${i}" aria-pressed="${!!state.locks[i]}" aria-label="${state.locks[i]?'Destravar':'Travar'} ${SLOT_NAMES[state.count][i]}" title="${state.locks[i]?'Destravar cor':'Manter esta cor ao gerar'}">${lockIcon(state.locks[i])}</button></div>`).join('');
+ const design=recommendationFor(state.current);$('#palette-verdict').textContent=design.recommended?`Recomendada: ${design.title}`:'Sua combinação personalizada';$('#palette-explanation').textContent=design.reason;
  updateSaveButton();
 }
 function choose(recipe,{restore=false}={}){
@@ -51,7 +52,7 @@ function choose(recipe,{restore=false}={}){
  $$('.palette-card').forEach(card=>card.classList.toggle('selected',card.dataset.key===recipeKey(state.current)));
 }
 function switchView(view){state.view=view;$('#nav-studio').classList.toggle('active',view==='studio');$('#nav-favorites').classList.toggle('active',view==='favorites');renderGallery();if(view==='favorites')$('#combinations').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}
-function paletteCard(p,i){return `<article class="palette-card ${state.current&&recipeKey(p)===recipeKey(state.current)?'selected':''}" data-key="${escape(recipeKey(p))}"><button class="palette-open" data-open="${i}" aria-label="Ver ${escape(p.name)} em 3D"><div class="palette-image"><span class="palette-placeholder">Prévia 3D</span></div><div class="palette-copy"><strong>${escape(p.name)}</strong><small>${p.material} · ${p.count} cores · ${p.variant==='com-fundo'?'com fundo':'sem fundo'}</small><div class="mini-swatches" aria-label="Cores da combinação">${p.colors.map(c=>`<span style="--swatch:${c.hex}" title="${escape(c.name)}"></span>`).join('')}</div></div></button><button class="card-save" data-save="${i}" aria-label="${isFavorite(p)?'Remover dos favoritos':'Salvar favorita'} ${escape(p.name)}" aria-pressed="${isFavorite(p)}">${isFavorite(p)?'♥':'♡'}</button></article>`;}
+function paletteCard(p,i){const design=recommendationFor(p);return `<article class="palette-card ${state.current&&recipeKey(p)===recipeKey(state.current)?'selected':''}" data-key="${escape(recipeKey(p))}" data-recommended="${design.recommended}"><button class="palette-open" data-open="${i}" aria-label="Ver ${escape(p.name)} em 3D"><div class="palette-image"><span class="palette-placeholder">Prévia 3D</span></div><div class="palette-copy"><strong>${escape(p.name)}</strong><small>${p.material} · ${p.count} cores · ${p.variant==='com-fundo'?'com fundo':'sem fundo'}</small>${state.view==='favorites'?`<small>${escape(groupById(p.groupId).name)}</small>`:''}<span class="recommendation-label">${design.recommended?'Recomendada':'Exploração livre'}</span><p class="palette-reason">${escape(design.reason)}</p><div class="mini-swatches" aria-label="Cores da combinação">${p.colors.map(c=>`<span style="--swatch:${c.hex}" title="${escape(c.name)}"></span>`).join('')}</div></div></button><button class="card-save" data-save="${i}" aria-label="${isFavorite(p)?'Remover dos favoritos':'Salvar favorita'} ${escape(p.name)}" aria-pressed="${isFavorite(p)}">${isFavorite(p)?'♥':'♡'}</button></article>`;}
 function observeCards(cards){for(const card of cards){const target=card.querySelector('.palette-open');if(target)thumbnailObserver.observe(target);}}
 async function renderThumbnails(){
  if(renderingThumbnails||!state.ready)return;renderingThumbnails=true;
@@ -74,22 +75,25 @@ function renderFeedStatus(){
  $('#gallery').setAttribute('aria-busy',String(state.loadingPage));
  if(state.view==='favorites')return;
  const more=!!state.pager?.hasMore;
- $('#feed-status').textContent=state.loadingPage?'Carregando próximas combinações…':`${state.batch.length} de ${state.pager?.total??0} combinações${more?' · role para carregar mais':' · Todas as combinações desta seleção'}`;
+ $('#feed-status').textContent=state.loadingPage?'Carregando próximas combinações…':state.selection==='recommended'?`${state.batch.length} selecionada${state.batch.length===1?'':'s'} para este grupo${state.locks.some(Boolean)?' com as travas atuais':''}`:`${state.batch.length} de ${state.pager?.total??0} combinações${more?' · role para carregar mais':' · Todas as combinações desta seleção'}`;
  $('#load-more').hidden=!more;$('#load-more').disabled=state.loadingPage||!state.ready;
  if(more&&!state.loadingPage&&state.ready)pageObserver.observe($('#feed-sentinel'));
 }
 function renderGallery(){
  ++state.generation;thumbnailObserver.disconnect();thumbnailJobs.clear();
- const recipes=state.view==='favorites'?state.favorites:state.batch;
- $('#gallery-title').textContent=state.view==='favorites'?'Suas favoritas':'Mais jeitos de colorir';
- $('#gallery-description').textContent=state.view==='favorites'?'Escolhas salvas neste navegador. Clique para rever em 3D.':`Até ${PAGE_SIZE} combinações por lote. Continue rolando para descobrir mais.`;
- $('#regenerate').hidden=state.view==='favorites';
- if(!recipes.length)$('#gallery').innerHTML='<div class="empty-state"><strong>A sua seleção começa aqui.</strong>Use “Salvar favorita” na combinação que gostar. Depois você pode baixar um backup.</div>';
+ const favorites=state.view==='favorites',selection=favorites?state.favoriteSelection:state.selection;
+ const recipes=state.galleryRecipes=favorites?listFavorites(state.favorites,selection):state.batch;
+ $('#gallery-title').textContent=favorites?'Suas favoritas':selection==='recommended'?'Selecionadas para o Enforma':'Explore as combinações';
+ $('#gallery-description').textContent=favorites?`${recipes.length} de ${state.favorites.length} favoritas. As recomendadas aparecem primeiro; suas escolhas continuam salvas.`:selection==='recommended'?'Uma seleção com base escura, tons graduais e brilhos claros.':`Todas as distribuições do grupo, ordenadas por composição. Até ${PAGE_SIZE} por lote.`;
+ const recommendedCount=favorites?listFavorites(state.favorites,'recommended').length:state.pager?.recommendedTotal??0,allCount=favorites?state.favorites.length:state.pager?.availableTotal??0;
+ $$('#selection-switch button').forEach(b=>{const recommended=b.dataset.selection==='recommended';b.classList.toggle('selected',b.dataset.selection===selection);b.setAttribute('aria-pressed',String(b.dataset.selection===selection));b.textContent=`${recommended?'Recomendadas':'Todas'} (${recommended?recommendedCount:allCount})`;});
+ $('#gallery').classList.toggle('recommended-grid',selection==='recommended');$('#gallery').classList.toggle('favorite-grid',favorites);
+ if(!recipes.length){const empty=favorites?(state.favorites.length?'Nenhuma favorita está na seleção recomendada. Use “Todas” para ver suas escolhas.':'Use “Salvar favorita” na combinação que gostar. Depois você pode baixar um backup.'):'As travas atuais não correspondem a uma seleção recomendada. Use “Todas” para explorar ou destrave uma cor.';$('#gallery').innerHTML=`<div class="empty-state"><strong>${favorites?'Suas favoritas aparecem aqui.':'Experimente outra seleção.'}</strong>${empty}</div>`;}
  else{$('#gallery').innerHTML=recipes.map(paletteCard).join('');observeCards($('#gallery').children);}
  renderFeedStatus();
 }
 function resetFeed(){
- state.pager=createRecipePager({groupId:state.groupId,variant:state.variant,count:state.count,neutral:state.neutral,current:state.current,locks:state.locks,seed:Date.now()});
+ state.pager=createRecipePager({groupId:state.groupId,variant:state.variant,count:state.count,neutral:state.neutral,current:state.current,locks:state.locks,seed:Date.now(),selection:state.selection});
  state.batch=state.pager.next();state.loadingPage=false;
 }
 async function loadMore(){
@@ -107,7 +111,7 @@ function generate(resetLocks=false,{keepCurrent=false}={}){
   if(resetLocks)state.locks.fill(false);
   resetFeed();
   state.view='studio';$('#nav-studio').classList.add('active');$('#nav-favorites').classList.remove('active');
-  if(!keepCurrent)choose(state.batch[0]);else renderSlots();renderGroup();renderGallery();
+  if(!keepCurrent&&state.batch[0])choose(state.batch[0]);else renderSlots();renderGroup();renderGallery();
  }catch(e){toast(e.message);}
 }
 function toggleFavorite(recipe){
@@ -123,14 +127,15 @@ $('#group-select').addEventListener('change',e=>{state.groupId=e.target.value;if
 $('#count-switch').addEventListener('click',e=>{const button=e.target.closest('button[data-count]');if(button&&!button.disabled)changeCount(Number(button.dataset.count));});
 $('#variant-switch').addEventListener('click',e=>{const button=e.target.closest('[data-variant]');if(!button||button.dataset.variant===state.variant)return;state.variant=button.dataset.variant;choose({...state.current,variant:state.variant});resetFeed();renderGroup();renderGallery();});
 $$('input[name=neutral]').forEach(input=>input.addEventListener('change',()=>{state.neutral=input.value;generate(true);}));
-$('#generate').addEventListener('click',()=>generate());$('#regenerate').addEventListener('click',()=>generate());
+$('#generate').addEventListener('click',()=>{state.selection='recommended';generate();});
+$('#selection-switch').addEventListener('click',e=>{const b=e.target.closest('[data-selection]');if(!b)return;if(state.view==='favorites'){state.favoriteSelection=b.dataset.selection;renderGallery();}else{state.selection=b.dataset.selection;generate(false,{keepCurrent:true});}});
 $('#load-more').addEventListener('click',loadMore);
 $('#slots').addEventListener('click',e=>{const b=e.target.closest('[data-lock]');if(b){const i=Number(b.dataset.lock);state.locks[i]=!state.locks[i];generate(false,{keepCurrent:true});}});
 $('#slots').addEventListener('change',e=>{if(!e.target.matches('select[data-slot]'))return;const i=Number(e.target.dataset.slot),c=availablePool(state.groupId,state.count,state.neutral).find(c=>c.id===e.target.value);if(!c)return;const old=state.current.colors[i],colors=state.current.colors.map((previous,j)=>j===i?c:previous.id===c.id?old:previous);try{choose(makeRecipe(state.groupId,state.variant,colors));generate(false,{keepCurrent:true});}catch(err){toast(err.message);renderSlots();}});
 $('#unlock').addEventListener('click',()=>{state.locks.fill(false);generate(false,{keepCurrent:true});});
 $('#save-current').addEventListener('click',()=>{if(state.current)toggleFavorite(state.current);});
 $('#gallery').addEventListener('click',e=>{
- const open=e.target.closest('[data-open]'),save=e.target.closest('[data-save]'),recipes=state.view==='favorites'?state.favorites:state.batch;
+ const open=e.target.closest('[data-open]'),save=e.target.closest('[data-save]'),recipes=state.galleryRecipes;
  if(open){const p=recipes[Number(open.dataset.open)];choose(p,{restore:state.view==='favorites'});$('#studio').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}
  if(save)toggleFavorite(recipes[Number(save.dataset.save)]);
 });
@@ -158,6 +163,6 @@ renderGroup();generate();
 try{
  viewer=new KeychainViewer($('#model-canvas'));await viewer.load();state.ready=true;viewer.apply(state.current);$('#model-loading').hidden=true;$('#generate').disabled=false;$('#save-current').disabled=false;$('#download-png').disabled=false;renderGallery();
  // Small read-only diagnostics used by browser verification.
- window.coloraStatus=()=>({ready:state.ready,variant:state.variant,material:groupById(state.groupId).material,groupId:state.groupId,count:state.count,used:state.current.colors.map(c=>c.id),favorites:state.favorites.length,triangles:viewer.renderer.info.render.triangles,loaded:state.batch.length,total:state.pager?.total,hasMore:state.pager?.hasMore,loadingPage:state.loadingPage,thumbnailCache:state.thumbnails.size});
+ window.coloraStatus=()=>({ready:state.ready,variant:state.variant,material:groupById(state.groupId).material,groupId:state.groupId,count:state.count,used:state.current.colors.map(c=>c.id),favorites:state.favorites.length,triangles:viewer.renderer.info.render.triangles,loaded:state.batch.length,total:state.pager?.total,hasMore:state.pager?.hasMore,loadingPage:state.loadingPage,thumbnailCache:state.thumbnails.size,selection:state.view==='favorites'?state.favoriteSelection:state.selection,visible:state.galleryRecipes.length,recommended:recommendationFor(state.current).recommended});
 }catch(err){console.error(err);$('#model-loading').replaceChildren(document.createTextNode('Não foi possível abrir o 3D. Atualize a página em um navegador com WebGL.'));toast('Falha ao carregar o modelo 3D. Atualize para tentar novamente.');}
 window.addEventListener('pagehide',()=>viewer?.dispose(),{once:true});

@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {GROUPS} from '../src/catalog.mjs';
-import {generateBatch,createRecipePager,PAGE_SIZE,roleSlots,availablePool,recipeKey,validateBackup,validateRecipe,saveFavorites,loadFavorites} from '../src/core.mjs';
+import {GROUPS,PALETTE_SELECTIONS} from '../src/catalog.mjs';
+import {generateBatch,createRecipePager,PAGE_SIZE,roleSlots,availablePool,recipeKey,validateBackup,validateRecipe,saveFavorites,loadFavorites,makeRecipe,recommendationFor,listFavorites} from '../src/core.mjs';
 test('all generated recipes stay in the selected group and have exactly the requested physical colors',()=>{
  for(const group of GROUPS)for(const count of [3,4,5]){
   if(group.colors.length<count){assert.throws(()=>generateBatch({groupId:group.id,count}));continue;}
@@ -64,4 +64,41 @@ test('small teams and locked colors finish without duplicate padding or infinite
  const recipes=[];while(locked.hasMore)recipes.push(...locked.next());
  assert.equal(recipes.length,360);assert.equal(new Set(recipes.map(recipeKey)).size,360);assert.ok(recipes.every(p=>p.colors[0].id===current.colors[0].id));
  const all=createRecipePager({groupId:current.groupId,count:5,current,locks:[true,true,true,true,true]});assert.equal(all.next().length,1);assert.equal(all.hasMore,false);
+});
+test('authored recommendations use canonical filaments and keep dark art and bright highlights in their actual regions',()=>{
+ for(const group of GROUPS)for(const pick of PALETTE_SELECTIONS[group.id]){
+  const colors=pick.ids.map(id=>group.colors.find(c=>c.id===id));
+  for(const variant of ['com-fundo','sem-fundo']){
+   const recipe=makeRecipe(group.id,variant,colors,pick.name),before=JSON.stringify(recipe);
+   const design=recommendationFor(recipe),regions=roleSlots(recipe.count).map(i=>recipe.colors[i]);
+   assert.equal(design.recommended,true);assert.equal(design.title,pick.name);assert.equal(JSON.stringify(recipe),before);
+   assert.notEqual(regions[4].id,'black');
+   if(recipe.count===5){assert.equal(regions[1].id,'black');assert.equal(regions[4].id,'white');}
+   assert.equal(recipeKey(validateRecipe(recipe)),recipeKey(recipe));
+  }
+ }
+ const group=GROUPS[0],good=makeRecipe(group.id,'com-fundo',['violet','blue','sky','white'].map(id=>group.colors.find(c=>c.id===id)));
+ const inverted=makeRecipe(group.id,'com-fundo',[...good.colors].reverse());
+ assert.ok(recommendationFor(good).score>recommendationFor(inverted).score);assert.equal(recommendationFor(inverted).recommended,false);
+});
+test('recommended filters preserve all combinations, page size and locks without inventing a selection',()=>{
+ for(const group of GROUPS)for(const count of [3,4,5])for(const neutral of ['white','black']){
+  if(count>group.colors.length)continue;
+  const all=createRecipePager({groupId:group.id,count,neutral,size:5000}),recipes=all.next();
+  const selected=createRecipePager({groupId:group.id,count,neutral,selection:'recommended'}),picks=selected.next();
+  assert.ok(picks.length>0);assert.equal(selected.availableTotal,recipes.length);assert.equal(selected.recommendedTotal,picks.length);
+  assert.deepEqual(new Set(picks.map(recipeKey)),new Set(recipes.filter(p=>recommendationFor(p).recommended).map(recipeKey)));
+  const scores=recipes.map(p=>recommendationFor(p).score);assert.deepEqual(scores,[...scores].sort((a,b)=>b-a));
+ }
+ const all=createRecipePager({groupId:'pla-boneca',count:5,size:5000}).next(),custom=all.find(p=>!recommendationFor(p).recommended);
+ const locked=createRecipePager({groupId:custom.groupId,count:5,current:custom,locks:Array(5).fill(true),selection:'recommended'});
+ assert.equal(locked.availableTotal,1);assert.equal(locked.total,0);assert.deepEqual(locked.next(),[]);assert.equal(locked.hasMore,false);
+ const free=createRecipePager({groupId:custom.groupId,count:5,current:custom,locks:Array(5).fill(true)});assert.equal(recipeKey(free.next()[0]),recipeKey(custom));
+});
+test('favorites list recommended first and filter copies without changing or losing saved recipes',()=>{
+ const recipes=createRecipePager({groupId:'pla-boneca',count:5,size:5000}).next(),picks=recipes.filter(p=>recommendationFor(p).recommended),custom=recipes.find(p=>!recommendationFor(p).recommended);
+ const saved=[custom,picks[1],picks[0]],before=JSON.stringify(saved),all=listFavorites(saved),selected=listFavorites(saved,'recommended');
+ assert.equal(all.length,saved.length);assert.equal(selected.length,2);assert.ok(recommendationFor(all[0]).recommended);
+ assert.deepEqual(new Set(all.map(recipeKey)),new Set(saved.map(recipeKey)));assert.equal(JSON.stringify(saved),before);
+ assert.deepEqual(new Set(validateBackup({app:'colora-enforma',version:1,favorites:saved}).map(recipeKey)),new Set(saved.map(recipeKey)));
 });

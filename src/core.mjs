@@ -1,4 +1,4 @@
-import {GROUPS,VARIANTS,groupById,SLOT_NAMES} from './catalog.mjs';
+import {GROUPS,VARIANTS,groupById,SLOT_NAMES,PALETTE_SELECTIONS} from './catalog.mjs';
 export const roleSlots=n=>n===3?[0,0,1,1,2]:n===4?[0,0,1,2,3]:n===5?[0,1,2,3,4]:(()=>{throw new Error('Escolha 3, 4 ou 5 cores.');})();
 export const luminance=hex=>{const v=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4);return v[0]*.2126+v[1]*.7152+v[2]*.0722;};
 export const contrast=(a,b)=>(Math.max(luminance(a),luminance(b))+.05)/(Math.min(luminance(a),luminance(b))+.05);
@@ -14,6 +14,22 @@ export function availablePool(groupId,n,neutral='white'){
  return g.colors;
 }
 export const recipeKey=p=>[p.groupId,p.variant,p.count,...p.colors.map(c=>`${c.id}:${c.hex}:${c.finish}`)].join('|');
+export function recommendationFor(p){
+ const selections=PALETTE_SELECTIONS[p.groupId]||[];
+ const rank=selections.findIndex(s=>s.ids.length===p.count&&s.ids.every((id,i)=>p.colors[i].id===id));
+ const selection=selections[rank],regions=roleSlots(p.count).map(i=>p.colors[i]),light=regions.map(c=>luminance(c.hex));
+ // Both parts of the logo sit on the body. In the art, r1 is the dark
+ // contour and r4 is the white highlight, so reversing them is penalized.
+ let score=20*(1-light[0])+25*light[4]+8*Math.min(contrast(regions[0].hex,regions[3].hex),7)+8*Math.min(contrast(regions[0].hex,regions[4].hex),7);
+ for(const [a,b]of [[1,2],[2,3],[3,4]])if(regions[a].id!==regions[b].id)score+=light[b]>=light[a]?10:-35;
+ if(p.colors.some(c=>c.id==='white'))score+=regions[4].id==='white'?20:-20;
+ if(p.colors.some(c=>c.id==='black'))score+=regions[1].id==='black'?15:-15;
+ const reason=selection?.reason||'Distribuição livre dos filamentos deste grupo.';
+ return {recommended:!!selection,title:selection?.name||'Combinação livre',reason,score:score+(selection?1000-rank*5:0)};
+}
+export function listFavorites(favorites,selection='all'){
+ return favorites.filter(p=>selection!=='recommended'||recommendationFor(p).recommended).sort((a,b)=>recommendationFor(b).score-recommendationFor(a).score);
+}
 export function makeRecipe(groupId,variant,colors,name='Sua combinação'){
  const group=groupById(groupId),count=colors.length;roleSlots(count);
  if(!VARIANTS.some(v=>v.id===variant))throw new Error('Variante inválida.');
@@ -25,8 +41,9 @@ export function makeRecipe(groupId,variant,colors,name='Sua combinação'){
  return {version:1,groupId,material:group.material,variant,count,name,colors:colors.map(c=>({...c})),createdAt:new Date().toISOString()};
 }
 export const PAGE_SIZE=50;
-export function createRecipePager({groupId,variant='com-fundo',count=4,neutral='white',seed=Date.now(),size=PAGE_SIZE,current=null,locks=[]}={}){
+export function createRecipePager({groupId,variant='com-fundo',count=4,neutral='white',seed=Date.now(),size=PAGE_SIZE,current=null,locks=[],selection='all'}={}){
  if(!Number.isSafeInteger(size)||size<1)throw new Error('Quantidade por lote inválida.');
+ if(!['all','recommended'].includes(selection))throw new Error('Seleção de combinações inválida.');
  const pool=availablePool(groupId,count,neutral),fixed=Array(count).fill(null),permutations=[];
  for(let i=0;i<count;i++)if(locks[i]&&current?.groupId===groupId&&current.count===count){
   fixed[i]=pool.find(c=>c.id===current.colors[i].id);
@@ -40,12 +57,13 @@ export function createRecipePager({groupId,variant='com-fundo',count=4,neutral='
   for(const c of pool)if(!reserved.has(c.id)&&!used.has(c.id)){colors[i]=c;used.add(c.id);visit(i+1);used.delete(c.id);}
  }
  visit(0);
- const ordered=shuffle(permutations,rngSeed(seed));
- ordered.sort((a,b)=>contrast(b[0].hex,b.at(-1).hex)-contrast(a[0].hex,a.at(-1).hex));
+ const ranked=shuffle(permutations,rngSeed(seed)).map(colors=>({colors,design:recommendationFor({groupId,count,colors})})).sort((a,b)=>b.design.score-a.design.score);
+ const recommendedTotal=ranked.filter(p=>p.design.recommended).length;
+ const ordered=selection==='recommended'?ranked.filter(p=>p.design.recommended):ranked;
  let offset=0;
- return {total:ordered.length,get hasMore(){return offset<ordered.length;},next(){
+ return {total:ordered.length,availableTotal:ranked.length,recommendedTotal,get hasMore(){return offset<ordered.length;},next(){
   const start=offset;offset=Math.min(offset+size,ordered.length);
-  return ordered.slice(start,offset).map((colors,i)=>makeRecipe(groupId,variant,colors,`${groupById(groupId).name} ${start+i+1}`));
+  return ordered.slice(start,offset).map(({colors,design},i)=>makeRecipe(groupId,variant,colors,design.recommended?design.title:`${groupById(groupId).name} ${start+i+1}`));
  }};
 }
 export function generateBatch(options={}){return createRecipePager({...options,size:options.size??6}).next();}
