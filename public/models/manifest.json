@@ -1,0 +1,618 @@
+{
+  "units": "mm",
+  "base": "v25b-released",
+  "floor_mm": -0.7,
+  "peak_mm": 0.5,
+  "models": {
+    "com-fundo": {
+      "file": "com-fundo.glb",
+      "source_sha256": "341c1a3bc6136e5df9d2a3169453042576203968571d7025c8ff4435777a07b4",
+      "bounds_mm": [
+        [
+          -17.5,
+          -35.00034,
+          -11.499999999999998
+        ],
+        [
+          17.5,
+          35.00034,
+          0.5
+        ]
+      ],
+      "faces": 659182,
+      "bytes": 11899024,
+      "parts": [
+        {
+          "name": "r0__corpo",
+          "role": 0,
+          "object": "base",
+          "faces": 14268
+        },
+        {
+          "name": "r0__tampa",
+          "role": 0,
+          "object": "tampa",
+          "faces": 98950
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-peixe-maior@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 5098
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-peixe-menor@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 3838
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-esquerda-superior@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 668
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-esquerda-inferior@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 892
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-direita-superior@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 1004
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-direita-meio@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 948
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-direita-inferior@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 1060
+        },
+        {
+          "name": "r4__bloco_enforma-peixes-gotas-ondas-onda-esquerda@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 3364
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-onda-central@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 6828
+        },
+        {
+          "name": "r4__bloco_enforma-peixes-gotas-ondas-onda-inferior@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 4976
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-E@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 2644
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-N@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 4980
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-F@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 2412
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-O@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 3024
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-R@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 3692
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-M@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 4364
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-A@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 3752
+        },
+        {
+          "name": "r3__bloco_enforma-kids-K@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 7170
+        },
+        {
+          "name": "r3__bloco_enforma-kids-I@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 4660
+        },
+        {
+          "name": "r3__bloco_enforma-kids-D@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 5340
+        },
+        {
+          "name": "r3__bloco_enforma-kids-S@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 5836
+        },
+        {
+          "name": "r1__bloco_polvo_azul_escuro",
+          "role": 1,
+          "object": "polvo",
+          "faces": 4340
+        },
+        {
+          "name": "r4__bloco_polvo_branco",
+          "role": 4,
+          "object": "polvo",
+          "faces": 51350
+        },
+        {
+          "name": "r3__bloco_polvo_azul_claro",
+          "role": 3,
+          "object": "polvo",
+          "faces": 71626
+        },
+        {
+          "name": "r1__bloco_golfinho_azul_escuro",
+          "role": 1,
+          "object": "golfinho",
+          "faces": 1354
+        },
+        {
+          "name": "r4__bloco_golfinho_branco",
+          "role": 4,
+          "object": "golfinho",
+          "faces": 6938
+        },
+        {
+          "name": "r2__bloco_golfinho_azul",
+          "role": 2,
+          "object": "golfinho",
+          "faces": 19686
+        },
+        {
+          "name": "r1__bloco_tartaruga_azul_escuro",
+          "role": 1,
+          "object": "tartaruga",
+          "faces": 1614
+        },
+        {
+          "name": "r4__bloco_tartaruga_branco",
+          "role": 4,
+          "object": "tartaruga",
+          "faces": 340
+        },
+        {
+          "name": "r2__bloco_tartaruga_azul",
+          "role": 2,
+          "object": "tartaruga",
+          "faces": 8074
+        },
+        {
+          "name": "r3__bloco_tartaruga_azul_claro",
+          "role": 3,
+          "object": "tartaruga",
+          "faces": 16018
+        },
+        {
+          "name": "r4__bloco_estrela_branco",
+          "role": 4,
+          "object": "estrela",
+          "faces": 11768
+        },
+        {
+          "name": "r2__bloco_estrela_azul",
+          "role": 2,
+          "object": "estrela",
+          "faces": 4942
+        },
+        {
+          "name": "r3__bloco_estrela_azul_claro",
+          "role": 3,
+          "object": "estrela",
+          "faces": 17940
+        },
+        {
+          "name": "r2__bloco_coral_azul",
+          "role": 2,
+          "object": "coral",
+          "faces": 9144
+        },
+        {
+          "name": "r3__bloco_algas_azul_claro",
+          "role": 3,
+          "object": "algas",
+          "faces": 16162
+        },
+        {
+          "name": "r2__bloco_bolhas_azul",
+          "role": 2,
+          "object": "bolhas",
+          "faces": 1346
+        },
+        {
+          "name": "r3__bloco_bolhas_azul_claro",
+          "role": 3,
+          "object": "bolhas",
+          "faces": 8652
+        },
+        {
+          "name": "r2__bloco_pedra_1_azul",
+          "role": 2,
+          "object": "pedra_1",
+          "faces": 2124
+        },
+        {
+          "name": "r2__bloco_pedra_2_azul",
+          "role": 2,
+          "object": "pedra_2",
+          "faces": 2488
+        },
+        {
+          "name": "r2__bloco_pedra_3_azul",
+          "role": 2,
+          "object": "pedra_3",
+          "faces": 3456
+        },
+        {
+          "name": "r2__bloco_pedra_4_azul",
+          "role": 2,
+          "object": "pedra_4",
+          "faces": 6208
+        },
+        {
+          "name": "r1__bloco_fundo_ondas_1",
+          "role": 1,
+          "object": "fundo",
+          "faces": 74090
+        },
+        {
+          "name": "r2__bloco_fundo_ondas_2",
+          "role": 2,
+          "object": "fundo",
+          "faces": 81996
+        },
+        {
+          "name": "r3__bloco_fundo_ondas_3",
+          "role": 3,
+          "object": "fundo",
+          "faces": 47758
+        }
+      ],
+      "pause": {
+        "simple_height_swap": false,
+        "shared_z_interval_mm": [
+          2.500000199999999,
+          32.5000002
+        ],
+        "role_z_intervals_mm": {
+          "0": [
+            1.999999987845058e-07,
+            35.0000002
+          ],
+          "1": [
+            2.500000199999999,
+            32.5000002
+          ],
+          "2": [
+            2.500000199999999,
+            32.9338002
+          ],
+          "3": [
+            1.9425108048583972,
+            32.939705095019534
+          ],
+          "4": [
+            1.9425403687622058,
+            33.0572568986084
+          ]
+        },
+        "note": "Intervalos geométricos; não substitui fatiamento nem gera pausas."
+      }
+    },
+    "sem-fundo": {
+      "file": "sem-fundo.glb",
+      "source_sha256": "4bd691709dc5c1570ad505c6e4990d6b3701276ec853e3bc283b21e1325ffa32",
+      "bounds_mm": [
+        [
+          -17.5,
+          -35.00034,
+          -11.499999999999998
+        ],
+        [
+          17.5,
+          35.00034,
+          0.5
+        ]
+      ],
+      "faces": 453414,
+      "bytes": 8187712,
+      "parts": [
+        {
+          "name": "r0__corpo",
+          "role": 0,
+          "object": "base",
+          "faces": 35402
+        },
+        {
+          "name": "r0__tampa",
+          "role": 0,
+          "object": "tampa",
+          "faces": 98950
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-peixe-maior@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 5098
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-peixe-menor@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 3838
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-esquerda-superior@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 668
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-esquerda-inferior@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 892
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-direita-superior@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 1004
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-direita-meio@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 948
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-direita-inferior@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 1060
+        },
+        {
+          "name": "r4__bloco_enforma-peixes-gotas-ondas-onda-esquerda@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 3364
+        },
+        {
+          "name": "r3__bloco_enforma-peixes-gotas-ondas-onda-central@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 6828
+        },
+        {
+          "name": "r4__bloco_enforma-peixes-gotas-ondas-onda-inferior@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 4976
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-E@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 2644
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-N@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 4980
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-F@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 2412
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-O@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 3024
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-R@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 3692
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-M@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 4364
+        },
+        {
+          "name": "r4__bloco_enforma-enforma-A@tampa",
+          "role": 4,
+          "object": "logo",
+          "faces": 3752
+        },
+        {
+          "name": "r3__bloco_enforma-kids-K@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 7170
+        },
+        {
+          "name": "r3__bloco_enforma-kids-I@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 4660
+        },
+        {
+          "name": "r3__bloco_enforma-kids-D@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 5340
+        },
+        {
+          "name": "r3__bloco_enforma-kids-S@tampa",
+          "role": 3,
+          "object": "logo",
+          "faces": 5836
+        },
+        {
+          "name": "r1__bloco_polvo_azul_escuro",
+          "role": 1,
+          "object": "polvo",
+          "faces": 4250
+        },
+        {
+          "name": "r4__bloco_polvo_branco",
+          "role": 4,
+          "object": "polvo",
+          "faces": 51366
+        },
+        {
+          "name": "r3__bloco_polvo_azul_claro",
+          "role": 3,
+          "object": "polvo",
+          "faces": 72002
+        },
+        {
+          "name": "r1__bloco_golfinho_azul_escuro",
+          "role": 1,
+          "object": "golfinho",
+          "faces": 1364
+        },
+        {
+          "name": "r4__bloco_golfinho_branco",
+          "role": 4,
+          "object": "golfinho",
+          "faces": 6980
+        },
+        {
+          "name": "r2__bloco_golfinho_azul",
+          "role": 2,
+          "object": "golfinho",
+          "faces": 19770
+        },
+        {
+          "name": "r1__bloco_tartaruga_azul_escuro",
+          "role": 1,
+          "object": "tartaruga",
+          "faces": 1618
+        },
+        {
+          "name": "r4__bloco_tartaruga_branco",
+          "role": 4,
+          "object": "tartaruga",
+          "faces": 340
+        },
+        {
+          "name": "r2__bloco_tartaruga_azul",
+          "role": 2,
+          "object": "tartaruga",
+          "faces": 8084
+        },
+        {
+          "name": "r3__bloco_tartaruga_azul_claro",
+          "role": 3,
+          "object": "tartaruga",
+          "faces": 16156
+        },
+        {
+          "name": "r4__bloco_estrela_branco",
+          "role": 4,
+          "object": "estrela",
+          "faces": 11742
+        },
+        {
+          "name": "r2__bloco_estrela_azul",
+          "role": 2,
+          "object": "estrela",
+          "faces": 4998
+        },
+        {
+          "name": "r3__bloco_estrela_azul_claro",
+          "role": 3,
+          "object": "estrela",
+          "faces": 18264
+        },
+        {
+          "name": "r2__bloco_coral_azul",
+          "role": 2,
+          "object": "coral",
+          "faces": 9298
+        },
+        {
+          "name": "r3__bloco_algas_azul_claro",
+          "role": 3,
+          "object": "algas",
+          "faces": 16280
+        }
+      ],
+      "pause": {
+        "simple_height_swap": false,
+        "shared_z_interval_mm": [
+          12.402600199999998,
+          24.8642002
+        ],
+        "role_z_intervals_mm": {
+          "0": [
+            1.999999987845058e-07,
+            35.0000002
+          ],
+          "1": [
+            12.402600199999998,
+            24.8642002
+          ],
+          "2": [
+            2.7314001999999995,
+            32.9338002
+          ],
+          "3": [
+            1.9425108048583972,
+            32.939705095019534
+          ],
+          "4": [
+            1.9425403687622058,
+            33.0572568986084
+          ]
+        },
+        "note": "Intervalos geométricos; não substitui fatiamento nem gera pausas."
+      }
+    }
+  }
+}

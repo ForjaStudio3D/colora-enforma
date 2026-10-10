@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="theme-color" content="#F3F6FB"><meta name="description" content="Explore o chaveiro Enforma em 3D. Combine os seus filamentos PLA ou PETG, gere opções com 3, 4 ou 5 cores e salve as favoritas.">
+ <title>Colora Enforma · Forja Studio 3D</title>
+ <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23264DA5'/%3E%3Cpath d='M18 20h28v7H26v5h16v7H26v5h20v7H18z' fill='white'/%3E%3C/svg%3E">
+ <style>/* STYLES */</style>
+</head>
+<body>
+ <a class="skip-link" href="#studio">Ir para o estúdio</a>
+ <header class="topbar wrap">
+  <a class="brand" href="#studio" aria-label="Colora Enforma, início"><span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="m20 3 17 10-17 10L3 13Z"/><path d="m3 20 17 10 17-10M3 27l17 10 17-10"/></svg></span><span>Colora <b>Enforma</b><small>por Forja Studio 3D</small></span></a>
+  <nav aria-label="Navegação"><button class="nav-button active" id="nav-studio">Estúdio</button><button class="nav-button" id="nav-favorites">Favoritas <span id="fav-count">0</span></button></nav>
+  <button class="quiet-button" id="backup-menu" aria-haspopup="dialog">Backup</button>
+ </header>
+ <main class="wrap">
+  <section class="intro"><div><h1>Uma peça. Muitas possibilidades.</h1><p>Teste seus filamentos no Enforma. Gire, combine e guarde as suas escolhas.</p></div><span class="project-mark">Enforma Kids <span>Oceano em relevo</span></span></section>
+  <section id="studio" class="studio" aria-label="Estúdio de cores">
+   <div class="preview-panel">
+    <div class="stage-top"><div class="segmented" id="variant-switch" aria-label="Versão da peça"><button data-variant="com-fundo" class="selected" aria-pressed="true">Com fundo</button><button data-variant="sem-fundo" aria-pressed="false">Sem fundo</button></div><span class="material-badge" id="stage-material">PLA</span></div>
+    <div class="stage" id="stage"><canvas id="model-canvas" aria-label="Chaveiro Enforma em 3D. Arraste para girar e use a roda ou dois dedos para aproximar."></canvas><div class="model-loading" id="model-loading" role="status"><span class="spinner"></span>Carregando o seu Enforma…</div><div class="view-tools" aria-label="Vistas 3D"><button data-view="front" title="Ver a frente">Frente</button><button data-view="perspective" class="selected" title="Ver em perspectiva">3D</button><button data-view="back" title="Ver o verso">Verso</button><button id="zoom-in" aria-label="Aproximar a peça">+</button><button id="zoom-out" aria-label="Afastar a peça">−</button></div></div>
+    <div class="stage-bottom"><span>Arraste para girar <span class="desktop-hint">· scroll para aproximar</span></span><button id="download-png" class="text-button" disabled>Baixar imagem</button></div>
+   </div>
+   <aside class="controls" aria-label="Gerador de combinações">
+    <div class="control-title"><h2>Seu grupo de filamentos</h2><span id="group-material" class="material-pill">PLA</span></div>
+    <label for="group-select" class="sr-only">Grupo de filamentos</label><select id="group-select"></select>
+    <div class="inventory" id="inventory" aria-label="Cores disponíveis neste grupo"></div>
+    <p id="group-note" class="small-note"></p>
+    <div class="count-heading"><h3>Quantas cores?</h3><span id="available-count"></span></div>
+    <div class="count-options" id="count-switch" aria-label="Quantidade de cores"><button data-count="3" aria-pressed="false">3 <span>cores</span></button><button data-count="4" class="selected" aria-pressed="true">4 <span>cores</span></button><button data-count="5" aria-pressed="false">5 <span>cores</span></button></div>
+    <fieldset class="neutral-options" id="neutral-control"><legend>A quarta cor</legend><label><input type="radio" name="neutral" value="white" checked> Branco</label><label><input type="radio" name="neutral" value="black"> Preto</label></fieldset>
+    <button class="primary-button" id="generate" disabled><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m5 4 2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Zm12 7 1.5 3.5L22 16l-3.5 1.5L17 21l-1.5-3.5L12 16l3.5-1.5L17 11Z" transform="translate(2 -1)"/></svg>Gerar combinações</button>
+    <p class="pause-note" id="pause-note" hidden>5 cores é um estudo visual. As cores aparecem nas mesmas alturas; uma única pausa por camada não resolve essa troca na U1.</p>
+    <div class="recipe-head"><div><h3>Na sua peça</h3><p>Trave as cores que quer manter.</p></div><button id="unlock" class="text-button" title="Destravar todas as cores">Destravar</button></div>
+    <div class="slots" id="slots"></div>
+    <div class="save-row"><button class="save-button" id="save-current" disabled>♡ Salvar favorita</button><button class="square-button" id="copy-recipe" aria-label="Copiar receita de cores" title="Copiar receita">↗</button></div>
+   </aside>
+  </section>
+  <section class="combinations" id="combinations" aria-label="Combinações geradas"><div class="section-head"><div><h2 id="gallery-title">Mais jeitos de colorir</h2><p id="gallery-description">Seis sugestões do mesmo grupo. Escolha uma para ver em 3D.</p></div><button class="text-button" id="regenerate">Gerar outras</button></div><div id="gallery" class="palette-grid"></div></section>
+  <section class="material-guide"><div class="guide-icon" aria-hidden="true">◒</div><p><strong>As cores ficam no seu grupo.</strong> PLA e PETG são separados. Os tons e o brilho são aproximações das fotos; o rosa translúcido tem uma simulação de passagem de luz.</p><a id="pink-reference" href="https://www.mercadolivre.com.br/filamento-bambu-lab-petg-translucido-rosa-1kg-175mm-refil/up/MLBU2959111289" target="_blank" rel="noopener noreferrer">Referência do rosa translúcido</a></section>
+ </main>
+ <footer class="wrap footer"><span>Forja Studio 3D <span class="footer-dot">·</span> Colora Enforma</span><span>Base v25b <span class="footer-dot">·</span> Relevo −0,70 / +0,50 mm</span><a href="https://forjastudio3d.github.io/cyber-octopus-lab/" target="_blank" rel="noopener noreferrer">Conheça o Color Lab Octopus</a></footer>
+ <div id="toast" role="status" aria-live="polite" hidden></div>
+ <dialog id="backup-dialog"><div class="dialog-head"><h2>Suas favoritas, com você</h2><button id="close-backup" class="square-button" aria-label="Fechar">×</button></div><p>As favoritas ficam neste navegador. Baixe um backup para levar suas escolhas a outro aparelho.</p><button class="primary-button" id="export-backup">Baixar backup JSON</button><label class="import-label" for="import-backup">Importar favoritas</label><input type="file" id="import-backup" accept="application/json,.json"><p class="small-note" id="backup-status" role="status"></p></dialog>
+ <script type="module" src="./app.js"></script>
+</body>
+</html>

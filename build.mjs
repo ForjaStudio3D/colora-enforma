@@ -1,0 +1,13 @@
+import {build} from 'esbuild';
+import {cp,mkdir,readFile,writeFile,rm} from 'node:fs/promises';
+await rm('dist',{recursive:true,force:true});
+await mkdir('dist',{recursive:true});
+await build({entryPoints:['src/app.mjs'],bundle:true,minify:true,format:'esm',target:'es2022',outfile:'dist/app.js'});
+const css=await readFile('src/styles.css','utf8');
+let html=await readFile('src/index.html','utf8');
+html=html.replace('/* STYLES */',css);
+await writeFile('dist/index.html',html);
+await writeFile('dist/.nojekyll','');
+await cp('public','dist',{recursive:true});
+await cp('THIRD_PARTY_NOTICES.txt','dist/THIRD_PARTY_NOTICES.txt');
+console.log('Colora Enforma: dist pronto.');
