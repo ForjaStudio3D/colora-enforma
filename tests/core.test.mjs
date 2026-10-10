@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {GROUPS,PALETTE_SELECTIONS} from '../src/catalog.mjs';
-import {generateBatch,createRecipePager,PAGE_SIZE,roleSlots,availablePool,recipeKey,validateBackup,validateRecipe,saveFavorites,loadFavorites,makeRecipe,recommendationFor,listFavorites} from '../src/core.mjs';
+import {generateBatch,createRecipePager,PAGE_SIZE,roleSlots,availablePool,recipeKey,validateBackup,validateRecipe,saveFavorites,loadFavorites,makeRecipe,recommendationFor,listFavorites,listRecommendations} from '../src/core.mjs';
 test('all generated recipes stay in the selected group and have exactly the requested physical colors',()=>{
  for(const group of GROUPS)for(const count of [3,4,5]){
   if(group.colors.length<count){assert.throws(()=>generateBatch({groupId:group.id,count}));continue;}
@@ -101,4 +101,16 @@ test('favorites list recommended first and filter copies without changing or los
  assert.equal(all.length,saved.length);assert.equal(selected.length,2);assert.ok(recommendationFor(all[0]).recommended);
  assert.deepEqual(new Set(all.map(recipeKey)),new Set(saved.map(recipeKey)));assert.equal(JSON.stringify(saved),before);
  assert.deepEqual(new Set(validateBackup({app:'colora-enforma',version:1,favorites:saved}).map(recipeKey)),new Set(saved.map(recipeKey)));
+});
+test('public recommendations are complete on a fresh browser, independent of favorites, with both piece variants',()=>{
+ const emptyStorage={getItem:()=>null},picks=listRecommendations(),withoutBackground=listRecommendations('sem-fundo');
+ assert.deepEqual(loadFavorites(emptyStorage),[]);assert.equal(picks.length,26);assert.equal(withoutBackground.length,26);
+ assert.deepEqual(new Set(picks.map(p=>p.groupId)),new Set(GROUPS.map(g=>g.id)));
+ assert.deepEqual(new Set(picks.map(p=>p.count)),new Set([3,4,5]));
+ assert.equal(new Set([...picks,...withoutBackground].map(recipeKey)).size,52);
+ for(const recipe of [...picks,...withoutBackground]){assert.ok(recommendationFor(recipe).recommended);assert.equal(recipeKey(validateRecipe(recipe)),recipeKey(recipe));}
+ assert.ok(picks.some(p=>p.count===4&&p.colors.some(c=>c.id==='black')));assert.ok(picks.some(p=>p.count===4&&p.colors.some(c=>c.id==='white')));
+ assert.ok(picks.filter(p=>p.groupId==='petg-azul-amarelo').every(p=>p.count<=4));
+ const saved=[picks[0]],before=JSON.stringify(saved),fresh=listRecommendations();fresh[0].colors[0].hex='#000000';
+ assert.equal(JSON.stringify(saved),before);assert.notEqual(listRecommendations()[0].colors[0].hex,'#000000');assert.equal(listRecommendations().length,26);
 });

@@ -8,12 +8,14 @@ Estúdio estático de cores para o chaveiro Enforma, com modelos 3D reais e vari
 
 - Seis grupos fechados de filamentos, separados em PLA e PETG.
 - Seleção inicial de combinações recomendadas para 3, 4 ou 5 cores, com progressão tonal e filamentos reais.
+- Aba “Recomendados” com as 26 seleções públicas já carregadas, separadas pelos seis grupos, nas versões com/sem fundo. Funciona também no primeiro acesso ou com armazenamento local bloqueado.
 - Em “Todas”, rolagem contínua em lotes de até 50 combinações únicas, ordenadas por composição, sem interpolar novos filamentos.
 - Miniaturas 3D carregadas perto da área visível; contador e fim explícito quando as possibilidades da seleção se esgotam.
 - Branco/preto como quarta cor dos grupos de três; ambos podem entrar no estudo com cinco cores.
 - O grupo PETG azul/amarelo permite três cores (azul, amarelo, branco) ou quatro (mais preto).
 - Órbita, frente, verso, perspectiva, zoom e duas versões da peça.
 - Troca manual de cores com permuta automática, travas e favoritos locais com snapshots completos. As favoritas recomendadas aparecem primeiro; um filtro permite revê-las sem excluir as demais.
+- Qualquer visitante pode favoritar diretamente do catálogo de recomendados. As favoritas são pessoais por navegador; o catálogo não depende delas nem as preenche automaticamente.
 - PNG com receita, texto, backup e importação JSON validada.
 
 Cinco cores são estudo visual. As cinco regiões possuem intervalos sobrepostos em Z na orientação de impressão; o site não promete uma troca por pausa nem gera 3MF/G-code. A configuração de impressão deve ser feita no Keychain Maker/Orca.

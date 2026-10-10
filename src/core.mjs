@@ -30,6 +30,9 @@ export function recommendationFor(p){
 export function listFavorites(favorites,selection='all'){
  return favorites.filter(p=>selection!=='recommended'||recommendationFor(p).recommended).sort((a,b)=>recommendationFor(b).score-recommendationFor(a).score);
 }
+export function listRecommendations(variant='com-fundo'){
+ return GROUPS.flatMap(group=>(PALETTE_SELECTIONS[group.id]||[]).map(pick=>makeRecipe(group.id,variant,pick.ids.map(id=>group.colors.find(c=>c.id===id)),pick.name)));
+}
 export function makeRecipe(groupId,variant,colors,name='Sua combinação'){
  const group=groupById(groupId),count=colors.length;roleSlots(count);
  if(!VARIANTS.some(v=>v.id===variant))throw new Error('Variante inválida.');
