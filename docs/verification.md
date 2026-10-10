@@ -31,3 +31,11 @@ Os 13 testes Node e o build passaram. O catálogo fornece 26 receitas canônicas
 Chromium isolado com WebGL confirmou duas sessões independentes: a primeira conservou suas favoritas após recarregar; a segunda começou com zero favoritas e as mesmas 26 recomendações. Todas as 26 receitas foram abertas e restauraram grupo, material, quantidade, neutro, variante e cores corretos. Favoritar diretamente do catálogo manteve a aba aberta e marcou o coração; Favoritas abriu a receita salva. Também passaram o atalho da lista vazia, a troca com/sem fundo, o catálogo com armazenamento bloqueado, a navegação por teclado e a paginação de 50/100 combinações após usar o catálogo.
 
 Os viewports de 320, 390, 768 e 800 px não apresentaram overflow horizontal; as três abas mantiveram alvos de pelo menos 44 px. Foram inspecionadas imagens do catálogo desktop, catálogo mobile e cabeçalho mobile. Nenhum erro de JavaScript foi observado. Esta é uma validação em navegador isolado, sem alegação de teste físico no celular. Não houve alteração das malhas 3D.
+
+# Abas de material, duas colunas e bases brancas · 2026-10-10
+
+Os 14 testes Node e o build passaram. Duas receitas de quatro cores foram acrescentadas: Branco com silk (PLA) e Branco e rosas (PETG). O catálogo soma 28 seleções por variante, sendo 21 PLA e 7 PETG. Cada material tem ao menos uma base branca, sem misturar filamentos de grupos diferentes ou mudar os mapas das regiões.
+
+Chromium isolado confirmou que as abas de material exibem somente as receitas do respectivo material, em ambas as variantes. A abertura das bases brancas restaurou material, grupo, quatro cores e corpo branco. Foram verificados favorito direto, reabertura, persistência após recarregar, troca de variante e seleção de abas por setas/Home/End com semântica ARIA de tabs/painel. Estúdio, Recomendados e Favoritas mantiveram exatamente duas colunas em 320, 390, 768 e 1440 px, inclusive na lista com um só cartão, sem overflow horizontal. A paginação de 50/100 combinações permaneceu funcional e sem repetições.
+
+Uma inspeção visual em lote conferiu as duas bases brancas, as abas no desktop e a grade dupla no celular. O detector de layout do Impeccable não retornou achados. Nenhum erro de JavaScript foi observado; as malhas 3D permaneceram intactas.

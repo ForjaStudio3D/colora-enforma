@@ -104,13 +104,20 @@ test('favorites list recommended first and filter copies without changing or los
 });
 test('public recommendations are complete on a fresh browser, independent of favorites, with both piece variants',()=>{
  const emptyStorage={getItem:()=>null},picks=listRecommendations(),withoutBackground=listRecommendations('sem-fundo');
- assert.deepEqual(loadFavorites(emptyStorage),[]);assert.equal(picks.length,26);assert.equal(withoutBackground.length,26);
+ assert.deepEqual(loadFavorites(emptyStorage),[]);assert.equal(picks.length,28);assert.equal(withoutBackground.length,28);
  assert.deepEqual(new Set(picks.map(p=>p.groupId)),new Set(GROUPS.map(g=>g.id)));
  assert.deepEqual(new Set(picks.map(p=>p.count)),new Set([3,4,5]));
- assert.equal(new Set([...picks,...withoutBackground].map(recipeKey)).size,52);
+ assert.equal(new Set([...picks,...withoutBackground].map(recipeKey)).size,56);
  for(const recipe of [...picks,...withoutBackground]){assert.ok(recommendationFor(recipe).recommended);assert.equal(recipeKey(validateRecipe(recipe)),recipeKey(recipe));}
  assert.ok(picks.some(p=>p.count===4&&p.colors.some(c=>c.id==='black')));assert.ok(picks.some(p=>p.count===4&&p.colors.some(c=>c.id==='white')));
  assert.ok(picks.filter(p=>p.groupId==='petg-azul-amarelo').every(p=>p.count<=4));
  const saved=[picks[0]],before=JSON.stringify(saved),fresh=listRecommendations();fresh[0].colors[0].hex='#000000';
- assert.equal(JSON.stringify(saved),before);assert.notEqual(listRecommendations()[0].colors[0].hex,'#000000');assert.equal(listRecommendations().length,26);
+ assert.equal(JSON.stringify(saved),before);assert.notEqual(listRecommendations()[0].colors[0].hex,'#000000');assert.equal(listRecommendations().length,28);
+});
+test('each material has a four-color recommendation with a white body and contrasting logo using its own filaments',()=>{
+ for(const variant of ['com-fundo','sem-fundo'])for(const material of ['PLA','PETG']){
+  const picks=listRecommendations(variant).filter(p=>p.material===material),whiteBases=picks.filter(p=>p.colors[0].id==='white');
+  assert.ok(whiteBases.length>=1);assert.ok(picks.every(p=>GROUPS.find(g=>g.id===p.groupId).material===material));
+  for(const p of whiteBases){const regions=roleSlots(p.count).map(i=>p.colors[i]);assert.equal(p.count,4);assert.equal(regions[0].id,'white');assert.notEqual(regions[3].id,'white');assert.notEqual(regions[4].id,'white');assert.equal(recipeKey(validateRecipe(p)),recipeKey(p));}
+ }
 });

@@ -14,8 +14,8 @@ export const FINISH_LABELS={solid:'Sólido',silk:'Silk',translucent:'Translúcid
 export const REGION_NAMES=['Corpo e tampa','Tons escuros da arte','Tons médios da arte','Tons claros e Kids','Brilhos e Enforma'];
 export const SLOT_NAMES={3:['Corpo e tons escuros','Tons médios e claros','Brilhos e Enforma'],4:['Corpo e tons escuros','Tons médios da arte','Tons claros e Kids','Brilhos e Enforma'],5:REGION_NAMES};
 
-// Authored selections follow the original model's dark / medium / light / white
-// regions. These are physical filament IDs, not newly generated paint colors.
+// Authored selections use the original regions and physical filament IDs.
+// White bases put contrasting colors in the logo and details.
 const pick=(name,ids,reason)=>({name,ids:ids.split(' '),reason});
 export const PALETTE_SELECTIONS={
  'pla-azuis-violeta':[
@@ -31,12 +31,14 @@ export const PALETTE_SELECTIONS={
   pick('Roxo profundo','purple black royal azure white','Corpo silk com contornos pretos e a arte em azul.'),
   pick('Silk na noite','black royal purple azure','Base preta, azul profundo e roxo com detalhes azul claro.'),
   pick('Três tons silk','royal purple azure','Azul profundo, roxo silk e azul médio em uma escala suave.'),
+  pick('Branco com silk','white azure purple royal','Base branca, azul na arte, roxo silk em Kids e azul profundo em Enforma.'),
  ],
  'petg-rosas':[
   pick('Rosa suave','pink hotpink rose white','Rosas na arte, translúcido nos tons claros e branco nos brilhos.'),
   pick('Rosa com contorno','pink black hotpink rose white','Contornos pretos destacam a arte rosa e os brilhos brancos.'),
   pick('Rosas na noite','black pink hotpink rose','Fundo preto com três rosas e detalhes translúcidos.'),
   pick('Três rosas','pink hotpink rose','Três rosas próximos para uma composição tonal suave.'),
+  pick('Branco e rosas','white rose hotpink pink','Base branca com rosa translúcido na arte e rosas vivos no logotipo e nos detalhes.'),
  ],
  'pla-tropical':[
   pick('Tropical claro','red mint gold white','Base vermelha com menta, amarelo e brilhos brancos.'),
