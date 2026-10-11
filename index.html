@@ -28,6 +28,9 @@ dialog{border:0;border-radius:20px;padding:26px;width:min(460px,calc(100% - 32px
 @media(max-height:500px) and (min-width:761px){:root{--header:60px}.studio-workspace{grid-template-columns:165px minmax(0,1fr)}.studio-regions{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(44px,1fr));gap:4px}.region-button{display:flex;flex-direction:column;justify-content:center;gap:2px;padding:2px}.region-button .color-disc{width:27px;height:27px}.region-button>span:not(.color-disc){font-size:9px;max-width:100%}.region-button small{display:none}#studio-preview .view-tools{display:none}.palette-color{min-height:50px;padding:2px;gap:2px}.palette-heading{min-height:44px}}
 @media(max-height:650px) and (max-width:760px){#studio-screen{padding-bottom:6px}.palette-color{min-height:46px;padding:1px;gap:1px}.palette-color .color-disc{width:26px;height:26px}.region-button{gap:2px;padding:1px}.region-button .color-disc{width:25px;height:25px}#studio-preview .view-tools{display:none}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+.lid-controls{display:flex;align-items:center;gap:12px;padding:4px 20px;border-top:1px solid #dbe4f0;flex-shrink:0}.lid-controls button{font-size:11px;font-weight:700;color:var(--blue);min-height:44px;min-width:94px;padding:6px 0;text-align:left}.lid-controls input{min-width:0;flex:1;height:44px;margin:0;accent-color:var(--blue);cursor:pointer}.lid-controls output{min-width:28px;text-align:right;font-size:11px;font-variant-numeric:tabular-nums;color:var(--muted)}
+@media(max-width:760px){#studio-preview .lid-controls{gap:7px;padding:0 8px}#studio-preview .lid-controls button{min-width:72px;font-size:10px}#studio-preview .lid-controls output{font-size:10px;min-width:23px}}
 </style>
 </head>
 <body>
@@ -53,8 +56,9 @@ dialog{border:0;border-radius:20px;padding:26px;width:min(460px,calc(100% - 32px
    <div class="detail-heading"><h1 id="detail-title" tabindex="-1"></h1><p id="detail-meta"></p></div>
   <div class="detail-layout">
    <div id="detail-preview"><div class="preview-panel" id="preview-panel">
-    <div class="stage-top"><span class="version-label">Oceano sem fundo</span><span class="material-badge" id="stage-material">PLA</span></div>
+    <div class="stage-top"><span class="version-label">Enforma V6 · relevo aprovado</span><span class="material-badge" id="stage-material">PLA</span></div>
     <div class="stage" id="stage"><canvas id="model-canvas" aria-label="Chaveiro Enforma em 3D. Arraste para girar e use a roda ou dois dedos para aproximar."></canvas><div class="model-loading" id="model-loading" role="status"><span class="spinner"></span>Carregando o seu Enforma…</div><div class="view-tools" aria-label="Vistas 3D"><button data-view="front" title="Ver a frente">Frente</button><button data-view="perspective" class="selected" title="Ver em perspectiva">3D</button><button data-view="back" title="Ver o verso">Verso</button><button id="zoom-in" aria-label="Aproximar a peça">+</button><button id="zoom-out" aria-label="Afastar a peça">−</button></div></div>
+    <div class="lid-controls" role="group" aria-label="Abertura da tampa"><button id="lid-toggle" aria-pressed="false" disabled>Abrir tampa</button><label for="lid-angle" class="sr-only">Ângulo da tampa</label><input id="lid-angle" type="range" min="0" max="85" step="1" value="0" disabled aria-valuetext="Tampa fechada"><output id="lid-value" for="lid-angle">0°</output></div>
     <div class="stage-bottom"><span>Arraste para girar <span class="desktop-hint">· scroll para aproximar</span></span><button id="download-png" class="text-button" disabled>Baixar imagem</button></div>
    </div></div>
    <aside class="detail-info" aria-label="Cores desta combinação">
@@ -79,6 +83,6 @@ dialog{border:0;border-radius:20px;padding:26px;width:min(460px,calc(100% - 32px
  <div id="toast" role="status" aria-live="polite" hidden></div>
  <dialog id="backup-dialog"><div class="dialog-head"><h2>Suas favoritas, com você</h2><button id="close-backup" class="square-button" aria-label="Fechar">×</button></div><p>As favoritas ficam neste navegador. Baixe um backup para levar suas escolhas a outro aparelho.</p><button class="primary-button" id="export-backup">Baixar backup JSON</button><label class="import-label" for="import-backup">Importar favoritas</label><input type="file" id="import-backup" accept="application/json,.json"><p class="small-note" id="backup-status" role="status"></p></dialog>
  <dialog id="order-dialog" aria-labelledby="order-title"><div class="dialog-head"><h2 id="order-title">Pedir este Enforma</h2><button id="close-order" class="square-button" aria-label="Fechar pedido">×</button></div><div id="order-preview" aria-label="Imagem e cores da combinação"></div><p id="order-status" role="status">Preparando a imagem…</p><button class="primary-button" id="share-order" hidden>Compartilhar imagem e cores</button><div class="order-actions"><button class="quiet-button" id="download-order" disabled>Baixar imagem</button><a class="quiet-button" id="open-whatsapp" target="_blank" rel="noopener noreferrer">Abrir WhatsApp da Forja</a></div><p class="small-note">Forja Studio 3D · (18) 99826-5902</p></dialog>
- <script type="module" src="./app.js"></script>
+ <script type="module" src="./app.js?v=277cf4958761"></script>
 </body>
 </html>

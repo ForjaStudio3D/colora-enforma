@@ -1,8 +1,8 @@
 {
   "units": "mm",
   "base": "v25b-released",
-  "floor_mm": -0.7,
-  "peak_mm": 0.5,
+  "floor_mm": -0.5,
+  "peak_mm": 1.2,
   "models": {
     "com-fundo": {
       "file": "com-fundo.glb",
@@ -337,282 +337,322 @@
       }
     },
     "sem-fundo": {
-      "file": "sem-fundo.glb",
-      "source_sha256": "4bd691709dc5c1570ad505c6e4990d6b3701276ec853e3bc283b21e1325ffa32",
+      "file": "enforma-v6-montagem.glb",
+      "revision": "V6",
+      "source_sha256": "258aba1baa5071b69ab1be4075bbeb367a8b39fac45d08bcaef1f1075e1da63c",
+      "file_sha256": "258aba1baa5071b69ab1be4075bbeb367a8b39fac45d08bcaef1f1075e1da63c",
+      "geometry": "Approved montagem.glb, byte-for-byte; no decimation or vertex changes",
       "bounds_mm": [
         [
           -17.5,
           -35.00034,
-          -11.499999999999998
+          -11.5
         ],
         [
           17.5,
           35.00034,
-          0.5
+          1.19994
         ]
       ],
-      "faces": 453414,
-      "bytes": 8187712,
+      "faces": 2115960,
+      "bytes": 41647576,
       "parts": [
         {
-          "name": "r0__corpo",
+          "name": "corpo",
           "role": 0,
           "object": "base",
-          "faces": 35402
+          "faces": 13036,
+          "lid": false
         },
         {
-          "name": "r0__tampa",
+          "name": "tampa",
           "role": 0,
           "object": "tampa",
-          "faces": 98950
+          "faces": 98950,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-peixes-gotas-ondas-peixe-maior@tampa",
+          "name": "bloco_enforma-peixes-gotas-ondas-peixe-maior@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 5098
+          "faces": 5098,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-peixes-gotas-ondas-peixe-menor@tampa",
+          "name": "bloco_enforma-peixes-gotas-ondas-peixe-menor@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 3838
+          "faces": 3838,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-esquerda-superior@tampa",
+          "name": "bloco_enforma-peixes-gotas-ondas-gota-esquerda-superior@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 668
+          "faces": 668,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-esquerda-inferior@tampa",
+          "name": "bloco_enforma-peixes-gotas-ondas-gota-esquerda-inferior@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 892
+          "faces": 892,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-direita-superior@tampa",
+          "name": "bloco_enforma-peixes-gotas-ondas-gota-direita-superior@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 1004
+          "faces": 1004,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-direita-meio@tampa",
+          "name": "bloco_enforma-peixes-gotas-ondas-gota-direita-meio@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 948
+          "faces": 948,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-peixes-gotas-ondas-gota-direita-inferior@tampa",
+          "name": "bloco_enforma-peixes-gotas-ondas-gota-direita-inferior@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 1060
+          "faces": 1060,
+          "lid": true
         },
         {
-          "name": "r4__bloco_enforma-peixes-gotas-ondas-onda-esquerda@tampa",
+          "name": "bloco_enforma-peixes-gotas-ondas-onda-esquerda@tampa",
           "role": 4,
           "object": "logo",
-          "faces": 3364
+          "faces": 3364,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-peixes-gotas-ondas-onda-central@tampa",
+          "name": "bloco_enforma-peixes-gotas-ondas-onda-central@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 6828
+          "faces": 6828,
+          "lid": true
         },
         {
-          "name": "r4__bloco_enforma-peixes-gotas-ondas-onda-inferior@tampa",
+          "name": "bloco_enforma-peixes-gotas-ondas-onda-inferior@tampa",
           "role": 4,
           "object": "logo",
-          "faces": 4976
+          "faces": 4976,
+          "lid": true
         },
         {
-          "name": "r4__bloco_enforma-enforma-E@tampa",
+          "name": "bloco_enforma-enforma-E@tampa",
           "role": 4,
           "object": "logo",
-          "faces": 2644
+          "faces": 2644,
+          "lid": true
         },
         {
-          "name": "r4__bloco_enforma-enforma-N@tampa",
+          "name": "bloco_enforma-enforma-N@tampa",
           "role": 4,
           "object": "logo",
-          "faces": 4980
+          "faces": 4980,
+          "lid": true
         },
         {
-          "name": "r4__bloco_enforma-enforma-F@tampa",
+          "name": "bloco_enforma-enforma-F@tampa",
           "role": 4,
           "object": "logo",
-          "faces": 2412
+          "faces": 2412,
+          "lid": true
         },
         {
-          "name": "r4__bloco_enforma-enforma-O@tampa",
+          "name": "bloco_enforma-enforma-O@tampa",
           "role": 4,
           "object": "logo",
-          "faces": 3024
+          "faces": 3024,
+          "lid": true
         },
         {
-          "name": "r4__bloco_enforma-enforma-R@tampa",
+          "name": "bloco_enforma-enforma-R@tampa",
           "role": 4,
           "object": "logo",
-          "faces": 3692
+          "faces": 3692,
+          "lid": true
         },
         {
-          "name": "r4__bloco_enforma-enforma-M@tampa",
+          "name": "bloco_enforma-enforma-M@tampa",
           "role": 4,
           "object": "logo",
-          "faces": 4364
+          "faces": 4364,
+          "lid": true
         },
         {
-          "name": "r4__bloco_enforma-enforma-A@tampa",
+          "name": "bloco_enforma-enforma-A@tampa",
           "role": 4,
           "object": "logo",
-          "faces": 3752
+          "faces": 3752,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-kids-K@tampa",
+          "name": "bloco_enforma-kids-K@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 7170
+          "faces": 7170,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-kids-I@tampa",
+          "name": "bloco_enforma-kids-I@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 4660
+          "faces": 4660,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-kids-D@tampa",
+          "name": "bloco_enforma-kids-D@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 5340
+          "faces": 5340,
+          "lid": true
         },
         {
-          "name": "r3__bloco_enforma-kids-S@tampa",
+          "name": "bloco_enforma-kids-S@tampa",
           "role": 3,
           "object": "logo",
-          "faces": 5836
+          "faces": 5836,
+          "lid": true
         },
         {
-          "name": "r1__bloco_polvo_azul_escuro",
+          "name": "bloco_piso_liso_sem_ondas",
+          "role": 1,
+          "object": "piso_liso",
+          "faces": 24224,
+          "lid": false
+        },
+        {
+          "name": "bloco_polvo_azul_escuro",
           "role": 1,
           "object": "polvo",
-          "faces": 4250
+          "faces": 22188,
+          "lid": false
         },
         {
-          "name": "r4__bloco_polvo_branco",
+          "name": "bloco_polvo_branco",
           "role": 4,
           "object": "polvo",
-          "faces": 51366
+          "faces": 14776,
+          "lid": false
         },
         {
-          "name": "r3__bloco_polvo_azul_claro",
+          "name": "bloco_polvo_azul_claro",
           "role": 3,
           "object": "polvo",
-          "faces": 72002
+          "faces": 580020,
+          "lid": false
         },
         {
-          "name": "r1__bloco_golfinho_azul_escuro",
+          "name": "bloco_golfinho_azul_escuro",
           "role": 1,
           "object": "golfinho",
-          "faces": 1364
+          "faces": 6186,
+          "lid": false
         },
         {
-          "name": "r4__bloco_golfinho_branco",
+          "name": "bloco_golfinho_branco",
           "role": 4,
           "object": "golfinho",
-          "faces": 6980
+          "faces": 50490,
+          "lid": false
         },
         {
-          "name": "r2__bloco_golfinho_azul",
+          "name": "bloco_golfinho_azul",
           "role": 2,
           "object": "golfinho",
-          "faces": 19770
+          "faces": 311224,
+          "lid": false
         },
         {
-          "name": "r1__bloco_tartaruga_azul_escuro",
+          "name": "bloco_tartaruga_azul_escuro",
           "role": 1,
           "object": "tartaruga",
-          "faces": 1618
+          "faces": 35804,
+          "lid": false
         },
         {
-          "name": "r4__bloco_tartaruga_branco",
+          "name": "bloco_tartaruga_branco",
           "role": 4,
           "object": "tartaruga",
-          "faces": 340
+          "faces": 1494,
+          "lid": false
         },
         {
-          "name": "r2__bloco_tartaruga_azul",
+          "name": "bloco_tartaruga_azul",
           "role": 2,
           "object": "tartaruga",
-          "faces": 8084
+          "faces": 97760,
+          "lid": false
         },
         {
-          "name": "r3__bloco_tartaruga_azul_claro",
+          "name": "bloco_tartaruga_azul_claro",
           "role": 3,
           "object": "tartaruga",
-          "faces": 16156
+          "faces": 237182,
+          "lid": false
         },
         {
-          "name": "r4__bloco_estrela_branco",
+          "name": "bloco_estrela_branco",
           "role": 4,
           "object": "estrela",
-          "faces": 11742
+          "faces": 25488,
+          "lid": false
         },
         {
-          "name": "r2__bloco_estrela_azul",
-          "role": 2,
-          "object": "estrela",
-          "faces": 4998
-        },
-        {
-          "name": "r3__bloco_estrela_azul_claro",
+          "name": "bloco_estrela_azul_claro",
           "role": 3,
           "object": "estrela",
-          "faces": 18264
+          "faces": 136966,
+          "lid": false
         },
         {
-          "name": "r2__bloco_coral_azul",
+          "name": "bloco_coral_azul",
           "role": 2,
           "object": "coral",
-          "faces": 9298
+          "faces": 106248,
+          "lid": false
         },
         {
-          "name": "r3__bloco_algas_azul_claro",
+          "name": "bloco_algas_azul_claro",
           "role": 3,
           "object": "algas",
-          "faces": 16280
+          "faces": 148988,
+          "lid": false
+        },
+        {
+          "name": "bloco_pedras_azul",
+          "role": 2,
+          "object": "pedras",
+          "faces": 128386,
+          "lid": false
         }
       ],
-      "pause": {
-        "simple_height_swap": false,
-        "shared_z_interval_mm": [
-          12.402600199999998,
-          24.8642002
+      "hinge": {
+        "pivot": [
+          0,
+          8.49538,
+          -5.49455
         ],
-        "role_z_intervals_mm": {
-          "0": [
-            1.999999987845058e-07,
-            35.0000002
-          ],
-          "1": [
-            12.402600199999998,
-            24.8642002
-          ],
-          "2": [
-            2.7314001999999995,
-            32.9338002
-          ],
-          "3": [
-            1.9425108048583972,
-            32.939705095019534
-          ],
-          "4": [
-            1.9425403687622058,
-            33.0572568986084
-          ]
-        },
-        "note": "Intervalos geométricos; não substitui fatiamento nem gera pausas."
+        "axis": [
+          1,
+          0,
+          0
+        ],
+        "max_degrees": 85,
+        "source_pose": "closed",
+        "source": "V25B geometria.py PINO_XY / ANG_FECHADO; native opening -Z; preview x=-Z,y=-X,z=Y+12.0921",
+        "limit_note": "Canonical mechanical range; does not validate physical clearance of this decorated lid."
       }
     }
-  }
+  },
+  "revision": "V6",
+  "color_root_mm": -1.5,
+  "window_mm": [
+    31,
+    33.6
+  ]
 }
