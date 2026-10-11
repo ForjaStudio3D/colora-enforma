@@ -38,7 +38,11 @@ npm run build
 
 ## Geometria e filamentos
 
-O visualizador usa o GLB existente `sem-fundo`, derivado da base **v25b-released** e da arte V2. Corpo, tampa e logotipo mantêm seus vértices originais; a arte já tem redução de detalhe para exibição. Esta atualização não altera as malhas, dimensões ou arquivos de produção. O manifesto em `public/models/manifest.json` registra hashes, cotas e regiões; `scripts/prepare_models.py --source <pasta-V2>` reproduz a exportação original.
+O visualizador usa **a montagem V6 aprovada**, copiada byte a byte do GLB canônico (SHA-256 `258aba1baa5071b69ab1be4075bbeb367a8b39fac45d08bcaef1f1075e1da63c`). São 39 partes e 2.115.960 triângulos, sem redução de geometria: área de 31 × 33,6 mm, piso −0,5 mm, relevo até +1,2 mm, pedras alinhadas e sulcos escuros reais no casco. O arquivo completo tem 41,6 MB e é reutilizado pelo catálogo e Estúdio após o carregamento. A base continua sendo **v25b-released**.
+
+Em detalhes e no Estúdio, **Abrir tampa / Fechar tampa** e o slider permitem inspecionar de 0° a 85°. Corpo e arte do oceano ficam fixos; tampa e seus 21 elementos de logo giram juntos no pivô canônico. O GLB já chega fechado. A articulação é visual e não altera a geometria, receitas, favoritos ou arquivos de impressão. Miniaturas e imagens de pedidos sempre mostram a peça fechada. O teto de 85° vem da base; não é uma prova física de folga ou colisão da peça decorada.
+
+`scripts/prepare_v6.py --source <pasta-V6>` copia a fonte aprovada e registra grupos/cores/pivô no manifesto. A preparação V2 e suas malhas anteriores permanecem no histórico. Os 3MFs de produção não são alterados.
 
 Os HEX aproximam as seis fotos fornecidas. Foto 1: PLA azuis/violeta; foto 2: PLA roxo silk/azuis; foto 3: PETG rosas; foto 4: PLA vermelho/verde/amarelo; foto 5: PETG azul/amarelo; foto 6: cores da boneca em PLA. Branco e preto pertencem ao material selecionado. A aparência silk/translúcida é uma aproximação.
 

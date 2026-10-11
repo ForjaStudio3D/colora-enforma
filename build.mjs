@@ -1,11 +1,14 @@
 import {build} from 'esbuild';
 import {cp,mkdir,readFile,writeFile,rm} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
 await rm('dist',{recursive:true,force:true});
 await mkdir('dist',{recursive:true});
 await build({entryPoints:['src/app.mjs'],bundle:true,minify:true,format:'esm',target:'es2022',outfile:'dist/app.js'});
 const css=await readFile('src/styles.css','utf8');
 let html=await readFile('src/index.html','utf8');
 html=html.replace('/* STYLES */',css);
+const version=createHash('sha256').update(await readFile('dist/app.js')).digest('hex').slice(0,12);
+html=html.replace('./app.js',`./app.js?v=${version}`);
 await writeFile('dist/index.html',html);
 await writeFile('dist/.nojekyll','');
 await cp('public','dist',{recursive:true});

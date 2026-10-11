@@ -1,0 +1,12 @@
+{
+  "status": "pass",
+  "errors": [],
+  "model": "V6",
+  "checks": [
+    "slider, open/close, keyboard",
+    "PLA/PETG",
+    "favorite/detail",
+    "catalog thumbnails",
+    "4 responsive viewports"
+  ]
+}

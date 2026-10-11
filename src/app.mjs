@@ -183,6 +183,14 @@ $('#load-more').addEventListener('click',loadMore);
 $('#gallery').addEventListener('click',e=>{const save=e.target.closest('[data-save]'),open=e.target.closest('[data-open]'),orderButton=e.target.closest('[data-order]');if(save)toggleFavorite(state.galleryRecipes[Number(save.dataset.save)]);if(open)state.returnKey=open.closest('.palette-card').dataset.key;if(orderButton)openOrder(state.galleryRecipes[Number(orderButton.dataset.order)]);});
 for(const id of ['#material-tabs','#studio-tabs'])$(id).addEventListener('keydown',e=>{const tabs=$$(`${id} a`),i=tabs.indexOf(e.target);if(i<0)return;const next=e.key==='ArrowRight'?(i+1)%tabs.length:e.key==='ArrowLeft'?(i+tabs.length-1)%tabs.length:e.key==='Home'?0:e.key==='End'?tabs.length-1:null;if(next===null)return;e.preventDefault();tabs[next].focus();tabs[next].click();});
 $$('[data-view]').forEach(b=>b.addEventListener('click',()=>{viewer?.view(b.dataset.view);$$('[data-view]').forEach(v=>v.classList.toggle('selected',v===b));}));
+function changeLid(value){
+ const angle=viewer?.setLid(value)||0;
+ $('#lid-angle').value=angle;$('#lid-value').textContent=`${angle}°`;
+ $('#lid-angle').setAttribute('aria-valuetext',angle===0?'Tampa fechada':`Tampa aberta a ${angle} graus`);
+ $('#lid-toggle').textContent=angle===0?'Abrir tampa':'Fechar tampa';$('#lid-toggle').setAttribute('aria-pressed',String(angle>0));
+}
+$('#lid-angle').addEventListener('input',event=>changeLid(event.target.value));
+$('#lid-toggle').addEventListener('click',()=>changeLid(viewer?.lidAngle>0?0:viewer?.rig.max||85));
 $('#zoom-in').addEventListener('click',()=>viewer?.zoom(.86));$('#zoom-out').addEventListener('click',()=>viewer?.zoom(1.16));
 $('#copy-recipe').addEventListener('click',async()=>{if(!state.current)return;const text=orderMessage(state.current,location.href);try{await navigator.clipboard.writeText(text);toast('Receita copiada.');}catch{download('colora-enforma-receita.txt',new Blob([text],{type:'text/plain;charset=utf-8'}));toast('Receita baixada como texto.');}});
 $('#download-png').addEventListener('click',async()=>{try{const p=catalogRecipe(state.current);download(fileName(p),await recipeImage(p));}catch(error){toast(error.message);}});
@@ -202,9 +210,9 @@ $('#import-backup').addEventListener('change',async e=>{
 history.scrollRestoration='manual';
 if(!location.hash)history.replaceState(null,'','#/recomendados/todos');
 window.addEventListener('hashchange',renderRoute);await renderRoute();
-window.coloraStatus=()=>({ready:state.ready,view:state.view,material:['detail','studio'].includes(state.view)?state.current?.material:state.material,groupId:state.current?.groupId,count:state.current?.count,variant:state.current?.variant||'sem-fundo',used:state.current?.colors.map(c=>c.id)||[],slots:isStudio(state.current)?[...state.current.slots]:null,selectedRegion:state.selectedRegion,favorites:visibleFavorites().length,visible:state.galleryRecipes.length,loaded:state.view==='catalog'?getFeed().items.length:state.galleryRecipes.length,total:state.view==='catalog'?getFeed().pager.total:state.galleryRecipes.length,hasMore:state.view==='catalog'&&getFeed().pager.hasMore,loadingPage:state.view==='catalog'&&getFeed().loading,thumbnailCache:state.thumbnails.size,route:state.route});
+window.coloraStatus=()=>({ready:state.ready,modelRevision:viewer?.manifest?.revision,lidAngle:viewer?.lidAngle,view:state.view,material:['detail','studio'].includes(state.view)?state.current?.material:state.material,groupId:state.current?.groupId,count:state.current?.count,variant:state.current?.variant||'sem-fundo',used:state.current?.colors.map(c=>c.id)||[],slots:isStudio(state.current)?[...state.current.slots]:null,selectedRegion:state.selectedRegion,favorites:visibleFavorites().length,visible:state.galleryRecipes.length,loaded:state.view==='catalog'?getFeed().items.length:state.galleryRecipes.length,total:state.view==='catalog'?getFeed().pager.total:state.galleryRecipes.length,hasMore:state.view==='catalog'&&getFeed().pager.hasMore,loadingPage:state.view==='catalog'&&getFeed().loading,thumbnailCache:state.thumbnails.size,route:state.route});
 try{
- viewer=new KeychainViewer($('#model-canvas'));await viewer.load();state.ready=true;$('#model-loading').hidden=true;
+ viewer=new KeychainViewer($('#model-canvas'));await viewer.load();state.ready=true;$('#model-loading').hidden=true;$('#lid-angle').max=viewer.rig.max;$('#lid-angle').disabled=false;$('#lid-toggle').disabled=false;
  if(state.view==='detail'){viewer.apply(state.current);viewer.resize();renderDetail();}else if(state.view==='studio'){renderStudio();viewer.resize();}else if(state.view==='catalog'||state.view==='favorites'){thumbnailObserver.disconnect();observeCards($('#gallery').children);}updateSaveButtons();
 }catch(error){console.error(error);$('#model-loading').replaceChildren(document.createTextNode('Não foi possível abrir o 3D. Atualize a página para tentar novamente.'));toast('Não foi possível carregar as prévias 3D.');}
 window.addEventListener('pagehide',()=>viewer?.dispose(),{once:true});
